@@ -1,5 +1,5 @@
-# TODO: For now ignore dist folder, this will be added back later once I find a good build system?
-dist
+# Ignore lib folder, don't need it on git
+lib
 
 # Created by https://www.gitignore.io/api/node,linux,macos,windows,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,linux,macos,windows,visualstudiocode
