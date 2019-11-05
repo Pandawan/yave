@@ -1,0 +1,27 @@
+{
+  "name": "yave",
+  "version": "0.1.0",
+  "description": "Yet Another Voxel Engine (written in TS).",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PandawanFr/yave.git"
+  },
+  "keywords": [
+    "Voxel",
+    "Engine",
+    "TypeScript"
+  ],
+  "author": "Pandawan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PandawanFr/yave/issues"
+  },
+  "homepage": "https://github.com/PandawanFr/yave#readme",
+  "devDependencies": {
+    "typescript": "^3.6.4"
+  }
+}
