@@ -7,8 +7,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "lint": "eslint . --ext .ts",
-    "prepublish": "npm run lint && npm run build"
+    "lint": "eslint . --ext .ts"
   },
   "repository": {
     "type": "git",
@@ -25,7 +24,13 @@
     "url": "https://github.com/PandawanFr/yave/issues"
   },
   "homepage": "https://github.com/PandawanFr/yave#readme",
+  "dependencies": {
+    "@trixt0r/ecs": "^0.2.0",
+    "strongly-typed-events": "^1.6.3",
+    "uuid": "^3.3.3"
+  },
   "devDependencies": {
+    "@types/uuid": "^3.4.6",
     "@typescript-eslint/eslint-plugin": "^2.6.1",
     "@typescript-eslint/parser": "^2.6.1",
     "eslint": "^6.6.0",
@@ -34,7 +39,7 @@
     "husky": "^3.0.9",
     "lint-staged": "^9.4.2",
     "prettier": "^1.18.2",
-    "typescript": "^3.6.4"
+    "typescript": "^3.7.2"
   },
   "husky": {
     "hooks": {
