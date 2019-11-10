@@ -1,2 +1,2 @@
-export { default as YaveEngine } from './engine';
-export * from './ecs/entity';
+export * from './engine';
+export * from './ecs';

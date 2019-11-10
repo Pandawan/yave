@@ -4,32 +4,48 @@ import {
   SimpleEventDispatcher,
   ISimpleEvent,
 } from 'strongly-typed-events';
-import { Engine as ECS } from '@trixt0r/ecs';
+import { YaveECS, RunOptions } from './ecs';
 
 /**
- * The main class for the Yave Engine
+ * The main class for the Yave Engine.
  */
-export default class YaveEngine {
+export class YaveEngine {
   /**
    * Current status of the engine.
    */
   private _status: 'stopped' | 'running' | 'paused' = 'stopped';
 
   /**
-   * Time to keep track of delta time.
-   * (This is essentially the time since the start of the frame).
+   * ID of the requestAnimationFrame's callback.
+   * Used to stop the main loop.
    */
-  private _time = Date.now();
+  private _frameId = 0;
+  /**
+   * Last time that the main loop executed.
+   */
+  private _lastTime = 0;
+  /**
+   * How long (in ms) has it been since the last update was executed.
+   */
+  private _accumulatedTime = 0;
 
+  /* Events */
   private _onInit = new SignalDispatcher();
   private _onStop = new SignalDispatcher();
-  private _onTick = new SimpleEventDispatcher<number>();
+  // TODO: Should this use RunOptions instead of number (deltaTime)?
+  private _onUpdate = new SimpleEventDispatcher<number>();
+  // TODO: Should this use RunOptions instead of number (deltaTime)?
+  private _onRender = new SimpleEventDispatcher<number>();
 
   /**
    * The Entity Component System engine.
-   * TODO: Should this be initialized on init instead of here?
    */
-  public ecs: ECS = new ECS();
+  public ecs: YaveECS = new YaveECS();
+
+  /**
+   * How long (in ms) to wait between updates.
+   */
+  public timeStep = 33;
 
   /**
    * Get the engine's current status.
@@ -51,11 +67,19 @@ export default class YaveEngine {
   public get onStop(): ISignal {
     return this._onStop.asEvent();
   }
+
   /**
-   * Event called before the engine has ticked (with deltaTime).
+   * Event called before the engine has updated (with deltaTime).
    */
-  public get onTick(): ISimpleEvent<number> {
-    return this._onTick.asEvent();
+  public get onUpdate(): ISimpleEvent<number> {
+    return this._onUpdate.asEvent();
+  }
+
+  /**
+   * Event called before the engine has rendered (with deltaTime).
+   */
+  public get onRender(): ISimpleEvent<number> {
+    return this._onRender.asEvent();
   }
 
   /**
@@ -66,8 +90,9 @@ export default class YaveEngine {
     if (this._status === 'running' || this._status === 'paused')
       throw new Error('Engine is already running (or paused)');
 
-    this.runLoop();
     this._status = 'running';
+    // Start the frame loop
+    this.frame(performance.now());
     this._onInit.dispatch();
   }
 
@@ -80,6 +105,8 @@ export default class YaveEngine {
       throw new Error('Engine is already stopped');
 
     this._onStop.dispatch();
+    // Stop the main loop entirely
+    cancelAnimationFrame(this._frameId);
     this._status = 'stopped';
   }
 
@@ -95,37 +122,70 @@ export default class YaveEngine {
   }
 
   /**
-   * The actual loop of the engine.
-   * This calls the ticking and other update functions.
+   * The engine's main loop.
+   * Executes `update()` every `timeStep` and `render()` every browser animation frame.
+   * @param _time How long the engine has been running.
    */
-  private runLoop(): void {
-    requestAnimationFrame(() => {
-      // Stop the loop if status says to
-      if (this.status === 'stopped') return;
+  private frame(_time: number): void {
+    // Stop the loop if status says to
+    if (this.status === 'stopped') return;
 
-      // Calculate deltatime
-      const now = Date.now();
-      const delta = now - this._time;
-      this._time = now;
+    const currentTime = performance.now();
+    let deltaTime = Math.min(1000, currentTime - this._lastTime);
+    // TODO: Change this.timeStep * 20 to something more appropriate
+    // If missed too many updates, skip all of them to catch up
+    // (usually happens when process has slept or CPU can't keep up)
+    if (deltaTime > this.timeStep * 10) deltaTime = this.timeStep;
 
-      // Call update functions
-      this.tick(delta);
+    // Keep track of how long it has been since the last update
+    this._accumulatedTime += deltaTime;
+    this._lastTime = currentTime;
 
-      // Loop
-      this.runLoop();
-    });
+    // If it has been more than {timeStep} since the last update, update as many times as possible to catch up
+    while (this._accumulatedTime >= this.timeStep) {
+      // this.time += this.step // This keeps track of how long the frame loop has been running
+      this._accumulatedTime -= this.timeStep;
+      this.update(this.timeStep);
+    }
+
+    // Render as often as rAF calls
+    this.render(deltaTime);
+    this._frameId = requestAnimationFrame(this.frame.bind(this));
   }
 
   /**
-   * Update the engine.
-   * @param delta Change in time since last tick
+   * Update the engine's non-rendering systems.
+   * @param delta Change in time since last update
    */
-  public tick(delta: number): void {
+  public update(delta: number): void {
     // Don't update if paused
     if (this.status === 'paused') return;
 
-    this._onTick.dispatch(delta);
+    const runOptions: RunOptions = {
+      isRendering: false,
+      deltaTime: delta,
+    };
 
-    this.ecs.run(delta);
+    this._onUpdate.dispatch(delta);
+
+    this.ecs.run(runOptions);
+  }
+
+  /**
+   * Update the engine's rendering systems.
+   * @param delta Change in time since last render
+   */
+  public render(delta: number): void {
+    // Don't update if paused
+    if (this.status === 'paused') return;
+
+    const runOptions: RunOptions = {
+      isRendering: true,
+      deltaTime: delta,
+    };
+
+    this._onRender.dispatch(delta);
+
+    this.ecs.run(runOptions);
   }
 }
