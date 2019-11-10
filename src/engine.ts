@@ -19,7 +19,7 @@ export class YaveEngine {
    * ID of the requestAnimationFrame's callback.
    * Used to stop the main loop.
    */
-  private _frameId = 0;
+  private _frameId: number | undefined = undefined;
   /**
    * Last time that the main loop executed.
    */
@@ -105,8 +105,11 @@ export class YaveEngine {
       throw new Error('Engine is already stopped');
 
     this._onStop.dispatch();
-    // Stop the main loop entirely
-    cancelAnimationFrame(this._frameId);
+    if (this._frameId !== undefined) {
+      // Stop the main loop entirely
+      cancelAnimationFrame(this._frameId);
+      this._frameId = undefined;
+    }
     this._status = 'stopped';
   }
 
