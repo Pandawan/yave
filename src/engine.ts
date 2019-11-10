@@ -40,7 +40,7 @@ export class YaveEngine {
   /**
    * The Entity Component System engine.
    */
-  public ecs: YaveECS = new YaveECS();
+  public ecs: YaveECS = new YaveECS(this);
 
   /**
    * How long (in ms) to wait between updates.

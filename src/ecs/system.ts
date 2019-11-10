@@ -1,26 +1,46 @@
 import { AbstractEntitySystem } from '@trixt0r/ecs';
 import { YaveEntity } from './entity';
 import { RunOptions } from './runOptions';
+import { YaveEngine } from '../engine';
+import { YaveECS } from './ecs';
 
 /**
  * Simple wrapper over System with support for YaveEntity
  */
 export abstract class YaveSystem extends AbstractEntitySystem<YaveEntity> {
   /**
+   * The reference to the Yave engine.
+   */
+  protected _yaveEngine: YaveEngine | null = null;
+
+  /**
+   * The reference to the ECS engine.
+   */
+  protected _engine: YaveECS | null = null;
+
+  /**
    * Whether or not this system should run in the render loop (instead of the tick loop).
    */
   public readonly isRenderSystem: boolean = false;
 
-  /* 
-    TODO: Need a way to pass the YaveEngine (not just YaveECS) to systems
-      - Perhaps the YaveECS could have a ref to YaveEngine, 
-        and when adding a system (ie onAddedSystems), 
-        it could set the "yave" property to be a ref to the YaveEngine
-          This might be confusing though since System.engine = YaveECS (and System.yave = YaveEngine)
-          it would be better if it was System.engine = YaveEngine (and System.ecs = YaveECS)
-      - One other way is to simply require a constructor with (engine: YaveEngine) as parameter in YaveSystem
-        But that's kind of ugly since it requires passing the engine when it really shouldn't (ie engine.ecs.systems.add(new YaveSystem(engine)))
-  */
+  /**
+   * The ECS engine this system is assigned to.
+   */
+  get engine(): YaveECS | null {
+    return this._engine;
+  }
+  set engine(engine: YaveECS | null) {
+    super.engine = engine;
+    // Update yaveEngine property as well
+    if (engine !== null) this._yaveEngine = engine.yaveEngine;
+  }
+
+  /**
+   * The Yave engine this system is assigned to.
+   */
+  get yaveEngine(): YaveEngine | null {
+    return this._yaveEngine;
+  }
 
   /** @inheritdoc */
   process(options?: RunOptions): void {

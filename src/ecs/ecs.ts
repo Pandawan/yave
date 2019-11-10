@@ -1,7 +1,19 @@
 import { Engine, EngineMode } from '@trixt0r/ecs';
 import { RunOptions } from './runOptions';
+import { YaveEngine } from '../engine';
 
 export class YaveECS extends Engine {
+  /**
+   * Reference to the actual yave engine that uses this ECS engine.
+   */
+  public readonly yaveEngine: YaveEngine;
+
+  /** @inheritdoc */
+  constructor(engine: YaveEngine) {
+    super();
+    this.yaveEngine = engine;
+  }
+
   /**
    * Updates all systems in this engine with the given options.
    *
