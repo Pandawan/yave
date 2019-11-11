@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { YaveEngine } from './index';
 import { YaveECS } from './ecs';
 import { AbstractRendering } from './rendering';

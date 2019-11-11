@@ -27,5 +27,14 @@
       }
     ],
     "@typescript-eslint/strict-boolean-expressions": "warn"
-  }
+  },
+  "overrides": [
+    {
+      "files": "*.spec.ts",
+      "rules": {
+        // Sometimes, I need to convert to "any" in order to set private members to mock functions
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    }
+  ]
 }

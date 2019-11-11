@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { YaveSystem, YaveRenderingSystem } from './system';
 import { RunOptions } from './runOptions';
 

@@ -153,7 +153,7 @@ export class YaveEngine {
 
     const currentTime = performance.now();
     let deltaTime = Math.min(1000, currentTime - this._lastTime);
-    // TODO: Change this.timeStep * 20 to something more appropriate
+    // TODO: Is skipping after missing 10 updates appropriate?
     // If missed too many updates, skip all of them to catch up
     // (usually happens when process has slept or CPU can't keep up)
     if (deltaTime > this.timeStep * 10) deltaTime = this.timeStep;

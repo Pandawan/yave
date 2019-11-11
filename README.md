@@ -13,7 +13,8 @@ Yet Another Voxel Engine (written in TS).
 
 ## TODO
 
-- Add basic rendering code & components
+- Add more options & more advanced rendering components & systems
+- Add position-fixing when resizing window (so that the center of the view remains the same after resizing).
 - Replace all "intentional undefined"s to null
 - Add assemblages
 - Create docs
