@@ -19,5 +19,6 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'js'],
   testMatch: ['**/+(*.)+(spec|test).+(ts|js)?(x)'],
-  modulePaths: ['<rootDir>/src']
+  modulePaths: ['<rootDir>/src'],
+  setupFiles: ['./utils/jestSetup.js','jest-webgl-canvas-mock']
 };

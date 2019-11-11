@@ -5,6 +5,7 @@ import {
   ISimpleEvent,
 } from 'strongly-typed-events';
 import { YaveECS, RunOptions } from './ecs';
+import { PixiRendering } from './rendering/pixiRendering';
 
 /**
  * The main class for the Yave Engine.
@@ -40,12 +41,27 @@ export class YaveEngine {
   /**
    * The Entity Component System engine.
    */
-  public ecs: YaveECS = new YaveECS(this);
+  public ecs: YaveECS;
+
+  /**
+   * The Rendering engine.
+   *
+   * TODO: Find a way to make this generic in a clean way.
+   * I tried with YaveEngine<RenderingEngine extends AbstractRendering<any> = PixiRendering>
+   * but you also have to pass the object (or constructor) for PixiRendering to YaveEngine's constructor, which is ugly.
+   */
+  public rendering: PixiRendering;
 
   /**
    * How long (in ms) to wait between updates.
    */
   public timeStep = 33;
+
+  constructor(containerId = 'game') {
+    // Important sub-engines are setup here
+    this.ecs = new YaveECS(this);
+    this.rendering = new PixiRendering(containerId);
+  }
 
   /**
    * Get the engine's current status.
@@ -91,7 +107,9 @@ export class YaveEngine {
       throw new Error('Engine is already running (or paused)');
 
     this._status = 'running';
-    // Start the frame loop
+    // Initialize the rendering engine
+    this.rendering.init();
+    // Start the game loop
     this.frame(performance.now());
     this._onInit.dispatch();
   }
@@ -171,6 +189,7 @@ export class YaveEngine {
 
     this._onUpdate.dispatch(delta);
 
+    // Run all systems
     this.ecs.run(runOptions);
   }
 
@@ -189,6 +208,10 @@ export class YaveEngine {
 
     this._onRender.dispatch(delta);
 
+    // Run all rendering systems
     this.ecs.run(runOptions);
+
+    // Render the view with rendering engine
+    this.rendering.render();
   }
 }

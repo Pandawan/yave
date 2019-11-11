@@ -2,15 +2,25 @@
 
 import { YaveEngine } from './index';
 import { YaveECS } from './ecs';
+import { AbstractRendering } from './rendering';
+import { utils } from 'pixi.js';
 
 describe('YaveEngine', () => {
   let engine: YaveEngine;
 
-  beforeEach(() => (engine = new YaveEngine()));
+  beforeEach(() => {
+    document.body.innerHTML = '<div id="game"></div>';
+    engine = new YaveEngine();
+    utils.skipHello();
+  });
 
   describe('initial', () => {
     it('should have an ECS instance', () => {
       expect(engine.ecs).toBeInstanceOf(YaveECS);
+    });
+
+    it('should have an AbstractRendering instance', () => {
+      expect(engine.rendering).toBeInstanceOf(AbstractRendering);
     });
 
     it('should be stopped', () => {
@@ -45,6 +55,12 @@ describe('YaveEngine', () => {
     it('should be running', () => {
       engine.init();
       expect(engine.status).toBe('running');
+    });
+
+    it('should be initializing the rendering engine', () => {
+      engine.rendering.init = jest.fn();
+      engine.init();
+      expect(engine.rendering.init).toBeCalled();
     });
 
     it('should be executing the game loop', () => {
@@ -114,6 +130,12 @@ describe('YaveEngine', () => {
 
       engine.onRender.subscribe(onRenderSpy);
       engine.init();
+    });
+
+    it("should call the rendering engine's render function", () => {
+      engine.rendering.render = jest.fn();
+      engine.init();
+      expect(engine.rendering.render).toBeCalled();
     });
   });
 
