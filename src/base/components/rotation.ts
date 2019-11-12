@@ -75,7 +75,7 @@ export class Rotation implements Component {
   }
 
   /**
-   * Create a rotation component with default values.
+   * Create a rotation component with default values of 0.
    */
   constructor();
   /**
@@ -95,21 +95,20 @@ export class Rotation implements Component {
     const clampedY = y !== undefined ? normalize(y, 0, 360) : undefined;
     const clampedZ = z !== undefined ? normalize(z, 0, 360) : undefined;
 
-    // Default constructor
-    if (clampedX === undefined) {
-      this.x = 0;
-      this.y = 0;
-      this.z = 0;
-    }
     // If only one rotation is passed, assume this is a 2D rotation (aka rotation around Z axis)
-    else if (clampedY === undefined && clampedZ === undefined) {
+    if (
+      clampedX !== undefined &&
+      clampedY === undefined &&
+      clampedZ === undefined
+    ) {
       this.x = 0;
       this.y = 0;
       this.z = clampedX;
     }
-    // Otherwise, it means x, y and z were passed
+    // Otherwise, just use the passed parameters
+    // this allows edge cases like Rotation(undefined, 0, 0) to work.
     else {
-      this.x = clampedX;
+      this.x = clampedX ?? 0;
       this.y = clampedY ?? 0;
       this.z = clampedZ ?? 0;
     }

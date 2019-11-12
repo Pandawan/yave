@@ -1,7 +1,7 @@
 import { YaveEntity } from '../../ecs/entity';
 import { SpriteRenderer } from './spriteRenderer';
 import { Sprite as PixiSprite, Texture as PixiTexture } from 'pixi.js';
-import { Position, Rotation } from '../../base';
+import { Position, Rotation, Scale } from '../../base';
 import { SpriteRendering } from '../components/spriteRendering';
 
 describe('SpriteRenderer', () => {
@@ -75,6 +75,18 @@ describe('SpriteRenderer', () => {
       const sprite = mockEntity.components.get(SpriteRendering);
 
       expect(sprite.sprite.angle).toBe(rot.z);
+    });
+
+    it("should update the sprite's scale (when there is one)", () => {
+      mockEntity.components.add(new Scale(1, 2));
+
+      (spriteRenderer as any).processEntity(mockEntity);
+
+      const scale = mockEntity.components.get(Scale);
+      const sprite = mockEntity.components.get(SpriteRendering);
+
+      expect(sprite.sprite.scale.x).toBe(scale.x);
+      expect(sprite.sprite.scale.y).toBe(scale.y);
     });
   });
 });

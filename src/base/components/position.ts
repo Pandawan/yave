@@ -5,7 +5,7 @@ import { Component } from '@trixt0r/ecs';
  */
 export class Position implements Component {
   /**
-   * Create a position component with default values.
+   * Create a position component with default values of 0.
    */
   constructor();
   /**
