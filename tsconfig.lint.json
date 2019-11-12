@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src/**/*", "utils", "jest.config.js"],
+  // Want to lint all files (this array is merged with the base one)
+  "include": ["src/**/*", "utils/**/*", "jest.config.js"],
   "compilerOptions": {
     "allowJs": true
   }

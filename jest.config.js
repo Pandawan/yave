@@ -10,7 +10,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   testEnvironmentOptions: {
     // Want APIs like "requestAnimationFrame" to be true
-    pretendToBeVisual: true
+    pretendToBeVisual: true,
   },
   globals: {
     'ts-jest': {
@@ -20,5 +20,5 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js'],
   testMatch: ['**/+(*.)+(spec|test).+(ts|js)?(x)'],
   modulePaths: ['<rootDir>/src'],
-  setupFiles: ['./utils/jestSetup.js','jest-webgl-canvas-mock']
+  setupFiles: ['./utils/jestSetup.js', 'jest-webgl-canvas-mock'],
 };

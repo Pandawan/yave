@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  // Want to exclude .spec.ts files from the lib build
+  "exclude": ["src/**/*.spec.ts"],
+  "compilerOptions": {
+    "allowJs": true
+  }
+}

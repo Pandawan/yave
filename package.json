@@ -5,8 +5,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch",
+    "build": "tsc --project tsconfig.build.json",
+    "watch": "tsc --watch --project tsconfig.build.json",
     "test": "jest",
     "lint": "eslint . --ext .ts"
   },
