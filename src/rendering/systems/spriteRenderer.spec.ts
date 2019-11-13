@@ -88,5 +88,13 @@ describe('SpriteRenderer', () => {
       expect(sprite.sprite.scale.x).toBe(scale.x);
       expect(sprite.sprite.scale.y).toBe(scale.y);
     });
+
+    it("should update the sprite's color and alpha", () => {
+      (spriteRenderer as any).processEntity(mockEntity);
+
+      const sprite = mockEntity.components.get(SpriteRendering);
+      expect(sprite.sprite.alpha).toBe(sprite.alpha);
+      expect(sprite.sprite.tint).toBe(sprite.color);
+    });
   });
 });

@@ -38,8 +38,13 @@ export class SpriteRenderer extends YaveRenderingSystem {
     if (spriteRendering.addedToEngine === false)
       this.addToRenderingEngine(spriteRendering);
 
+    // Update the sprite's color & alpha
+    spriteRendering.sprite.tint = spriteRendering.color;
+    spriteRendering.sprite.alpha = spriteRendering.alpha;
     // Update the sprite's position
     spriteRendering.sprite.position.set(position.x, position.y);
+    // Update z index based on z position (See: https://pixijs.download/dev/docs/PIXI.Sprite.html#zIndex)
+    spriteRendering.sprite.zIndex = position.z;
     // Update rotation if applicable
     if (rotation !== undefined) spriteRendering.sprite.angle = rotation.z;
     // Update scale if applicable
