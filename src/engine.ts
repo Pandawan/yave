@@ -112,6 +112,7 @@ export class YaveEngine {
     // Start the game loop
     this.frame(performance.now());
     this._onInit.dispatch();
+    // TODO: Find a way to blocking async load the pixi sprites. Perhaps some sort of renderingEngine implementation which has async events that are all called and awaited for.
   }
 
   /**

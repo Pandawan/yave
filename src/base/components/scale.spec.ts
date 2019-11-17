@@ -16,7 +16,7 @@ describe('Scale Component', () => {
       expect(scale.z).toBe(2);
     });
 
-    it('should work with one parameter', () => {
+    it('should work with two parameters', () => {
       const scale = new Scale(2, 3);
       expect(scale.x).toBe(2);
       expect(scale.y).toBe(3);

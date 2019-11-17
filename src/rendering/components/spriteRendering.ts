@@ -1,7 +1,7 @@
 import { Component } from '@trixt0r/ecs';
 import { Sprite as PixiSprite, Texture as PixiTexture } from 'pixi.js';
 
-// NOTE: This is named SpriteRendering because name conflicts with pixi.js' Sprite and might be too confusing
+// NOTE: This is named SpriteRendering because "Sprite" name conflicts with pixi.js' Sprite and might be too confusing
 export class SpriteRendering implements Component {
   /**
    * The PIXI.Sprite object.
