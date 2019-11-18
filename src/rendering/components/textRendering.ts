@@ -1,8 +1,12 @@
-import { Component } from '@trixt0r/ecs';
-import { Text as PixiText, TextStyle as PixiTextStyle } from 'pixi.js';
+import {
+  Sprite as PixiSprite,
+  Text as PixiText,
+  TextStyle as PixiTextStyle,
+} from 'pixi.js';
+import { PixiRendering } from './pixiRendering';
 
 // NOTE: This is named TextRendering because "Text" name conflicts with pixi.js' Text and might be too confusing
-export class TextRendering implements Component {
+export class TextRendering extends PixiRendering {
   /**
    * The PIXI.Text object.
    */
@@ -31,10 +35,12 @@ export class TextRendering implements Component {
   }
 
   /**
-   * Whether or not the text has been added to the renderingEngine.
-   * (This prevents it from being added/rendered multiple times).
+   * The PIXI.Text object.
+   * Note: PIXI.Text extends PIXI.Sprite, but we need a generic SpriteRendering for this.
    */
-  public addedToEngine = false;
+  public get sprite(): PixiSprite {
+    return this.textObject;
+  }
 
   constructor(text: string, fontSize: number, color: number);
   constructor(text: string, style: PixiTextStyle);
@@ -44,6 +50,8 @@ export class TextRendering implements Component {
     styleOrFontSize: number | PixiTextStyle = 16,
     color = 0xffffff
   ) {
+    super();
+
     if (text instanceof PixiText) {
       this.textObject = text;
       return;
