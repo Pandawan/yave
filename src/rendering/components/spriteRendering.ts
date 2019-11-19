@@ -1,4 +1,4 @@
-import { Sprite as PixiSprite, Texture as PixiTexture } from 'pixi.js';
+import PIXI from '../../lib/pixi';
 import { PixiRendering } from './pixiRendering';
 
 // NOTE: This is named SpriteRendering because "Sprite" name conflicts with pixi.js' Sprite and might be too confusing
@@ -6,7 +6,7 @@ export class SpriteRendering extends PixiRendering {
   /**
    * The PIXI.Sprite object.
    */
-  public sprite: PixiSprite;
+  public sprite: PIXI.Sprite;
 
   /**
    * The color (in hex) to apply to the sprite.
@@ -32,20 +32,20 @@ export class SpriteRendering extends PixiRendering {
   }
 
   constructor(textureURL: string, color?: number, alpha?: number);
-  constructor(texture: PixiTexture, color?: number, alpha?: number);
-  constructor(sprite: PixiSprite, color?: number, alpha?: number);
+  constructor(texture: PIXI.Texture, color?: number, alpha?: number);
+  constructor(sprite: PIXI.Sprite, color?: number, alpha?: number);
   constructor(
-    sprite: string | PixiSprite | PixiTexture,
+    sprite: string | PIXI.Sprite | PIXI.Texture,
     color = 0xffffff,
     alpha = 1
   ) {
     super();
 
-    if (sprite instanceof PixiSprite) {
+    if (sprite instanceof PIXI.Sprite) {
       this.sprite = sprite;
     } else {
       // TODO: Add (option to use) more optimized asset loader from pixi
-      this.sprite = PixiSprite.from(sprite);
+      this.sprite = PIXI.Sprite.from(sprite);
     }
 
     this.color = color;

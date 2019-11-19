@@ -1,8 +1,4 @@
-import {
-  Sprite as PixiSprite,
-  Text as PixiText,
-  TextStyle as PixiTextStyle,
-} from 'pixi.js';
+import PIXI from '../../lib/pixi';
 import { PixiRendering } from './pixiRendering';
 
 // NOTE: This is named TextRendering because "Text" name conflicts with pixi.js' Text and might be too confusing
@@ -10,7 +6,7 @@ export class TextRendering extends PixiRendering {
   /**
    * The PIXI.Text object.
    */
-  public textObject: PixiText;
+  public textObject: PIXI.Text;
 
   /**
    * The text to render.
@@ -26,11 +22,11 @@ export class TextRendering extends PixiRendering {
   /**
    * The style to render the text with.
    */
-  public get style(): PixiTextStyle {
+  public get style(): PIXI.TextStyle {
     return this.textObject.style;
   }
 
-  public set style(value: PixiTextStyle) {
+  public set style(value: PIXI.TextStyle) {
     this.textObject.style = value;
   }
 
@@ -38,26 +34,26 @@ export class TextRendering extends PixiRendering {
    * The PIXI.Text object.
    * Note: PIXI.Text extends PIXI.Sprite, but we need a generic SpriteRendering for this.
    */
-  public get sprite(): PixiSprite {
+  public get sprite(): PIXI.Sprite {
     return this.textObject;
   }
 
   constructor(text: string, fontSize: number, color: number);
-  constructor(text: string, style: PixiTextStyle);
-  constructor(text: PixiText);
+  constructor(text: string, style: PIXI.TextStyle);
+  constructor(text: PIXI.Text);
   constructor(
-    text: string | PixiText,
-    styleOrFontSize: number | PixiTextStyle = 16,
+    text: string | PIXI.Text,
+    styleOrFontSize: number | PIXI.TextStyle = 16,
     color = 0xffffff
   ) {
     super();
 
-    if (text instanceof PixiText) {
+    if (text instanceof PIXI.Text) {
       this.textObject = text;
       return;
     }
 
-    let style: PixiTextStyle = new PixiTextStyle();
+    let style: PIXI.TextStyle = new PIXI.TextStyle();
 
     if (typeof styleOrFontSize === 'number') {
       style.fontSize = styleOrFontSize;
@@ -66,6 +62,6 @@ export class TextRendering extends PixiRendering {
       style = styleOrFontSize;
     }
 
-    this.textObject = new PixiText(text, style);
+    this.textObject = new PIXI.Text(text, style);
   }
 }

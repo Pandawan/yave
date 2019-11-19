@@ -1,7 +1,7 @@
 import { YaveEngine } from './index';
 import { YaveECS } from './ecs';
 import { AbstractRendering } from './rendering';
-import { utils } from 'pixi.js';
+import PIXI from './lib/pixi';
 
 describe('YaveEngine', () => {
   let engine: YaveEngine;
@@ -9,7 +9,7 @@ describe('YaveEngine', () => {
   beforeEach(() => {
     document.body.innerHTML = '<div id="game"></div>';
     engine = new YaveEngine();
-    utils.skipHello();
+    PIXI.utils.skipHello();
   });
 
   describe('initial', () => {

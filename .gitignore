@@ -1,5 +1,5 @@
 # Ignore lib folder, don't need it on git
-lib
+/lib
 
 # Created by https://www.gitignore.io/api/node,linux,macos,windows,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,linux,macos,windows,visualstudiocode

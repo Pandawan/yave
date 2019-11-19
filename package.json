@@ -27,6 +27,7 @@
   "homepage": "https://github.com/PandawanFr/yave#readme",
   "dependencies": {
     "@trixt0r/ecs": "^0.2.0",
+    "pixi-tilemap": "^2.0.1",
     "pixi.js": "^5.2.0",
     "strongly-typed-events": "^1.6.3",
     "uuid": "^3.3.3"

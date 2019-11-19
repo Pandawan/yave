@@ -1,9 +1,10 @@
-import { Application as PixiApplication } from 'pixi.js';
+import PIXI from '../lib/pixi';
 import { AbstractRendering } from './rendering';
 
-export class PixiRendering extends AbstractRendering<PixiApplication> {
+export class PixiRendering extends AbstractRendering<PIXI.Application> {
   init(): void {
-    this.renderingEngine = new PixiApplication({
+    // TODO: Might want to switch this to a PIXI.Renderer + PIXI.Container
+    this.renderingEngine = new PIXI.Application({
       width: this.container.clientWidth,
       height: this.container.clientHeight,
       resizeTo: this.container,

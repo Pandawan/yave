@@ -1,6 +1,6 @@
 import { YaveEntity } from '../../ecs/entity';
 import { PixiRenderer } from './pixiRenderer';
-import { Texture as PixiTexture } from 'pixi.js';
+import PIXI from '../../lib/pixi';
 import { Anchor, Position, Rotation, Scale } from '../../base';
 import { SpriteRendering } from '../components/spriteRendering';
 import { TextRendering } from '../components/textRendering';
@@ -31,7 +31,7 @@ describe('PixiRenderer', () => {
     typeof SpriteRendering | typeof TextRendering,
     SpriteRendering | TextRendering
   ][] = [
-    [SpriteRendering, new SpriteRendering(PixiTexture.WHITE)],
+    [SpriteRendering, new SpriteRendering(PIXI.Texture.WHITE)],
     [TextRendering, new TextRendering('Test', 16, 0xffffff)],
   ];
 
@@ -136,7 +136,7 @@ describe('PixiRenderer', () => {
     beforeEach(() => {
       mockEntity = new YaveEntity();
       mockEntity.components.add(new Position(1, 2, 3));
-      mockEntity.components.add(new SpriteRendering(PixiTexture.WHITE));
+      mockEntity.components.add(new SpriteRendering(PIXI.Texture.WHITE));
     });
 
     describe('processEntity', () => {
