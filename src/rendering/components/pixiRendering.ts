@@ -3,9 +3,9 @@ import PIXI from '../../lib/pixi';
 
 export abstract class PixiRendering implements Component {
   /**
-   * The underlying PIXI.Sprite object.
+   * The underlying PIXI object.
    */
-  public abstract get sprite(): PIXI.Sprite;
+  public abstract get pixiObj(): PIXI.Container;
 
   /**
    * Whether or not the sprite has been added to the renderingEngine.

@@ -31,6 +31,13 @@ export class SpriteRendering extends PixiRendering {
     this.sprite.alpha = value;
   }
 
+  /**
+   * The underlying generic PIXI object.
+   */
+  public get pixiObj(): PIXI.Container {
+    return this.sprite;
+  }
+
   constructor(textureURL: string, color?: number, alpha?: number);
   constructor(texture: PIXI.Texture, color?: number, alpha?: number);
   constructor(sprite: PIXI.Sprite, color?: number, alpha?: number);

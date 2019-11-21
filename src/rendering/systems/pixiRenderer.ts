@@ -1,15 +1,23 @@
+import { ComponentClass } from '@trixt0r/ecs';
 import { YaveRenderingSystem, YaveEntity } from '../../ecs';
 import { SpriteRendering } from '../components/spriteRendering';
 import { PixiRendering } from '../components/pixiRendering';
 import { TextRendering } from '../components/textRendering';
+import { TilemapRendering } from '../components/tilemapRendering';
 import { Anchor, Position, Rotation, Scale } from '../../base';
+
+const supportedRenderingComponents: ComponentClass<PixiRendering>[] = [
+  SpriteRendering,
+  TextRendering,
+  TilemapRendering,
+];
 
 /**
  * Rendering System for SpriteRendering and TextRendering component.
  */
 export class PixiRenderer extends YaveRenderingSystem {
   constructor() {
-    super(undefined, [Position], undefined, [SpriteRendering, TextRendering]);
+    super(undefined, [Position], undefined, supportedRenderingComponents);
   }
 
   onAddedEntities(...entities: YaveEntity[]): void {
@@ -62,33 +70,33 @@ export class PixiRenderer extends YaveRenderingSystem {
       if (pixiRendering.addedToEngine === false)
         this.addToRenderingEngine(pixiRendering);
 
-      // Update the sprite's position
-      pixiRendering.sprite.position.set(position.x, position.y);
+      // Update the pixiObj's position
+      pixiRendering.pixiObj.position.set(position.x, position.y);
       // Update z index based on z position (See: https://pixijs.download/dev/docs/PIXI.Sprite.html#zIndex)
-      pixiRendering.sprite.zIndex = position.z;
+      pixiRendering.pixiObj.zIndex = position.z;
 
       // Update rotation if applicable
-      if (rotation !== undefined) pixiRendering.sprite.angle = rotation.z;
+      if (rotation !== undefined) pixiRendering.pixiObj.angle = rotation.z;
 
       // Update anchor if applicable
-      if (anchor !== undefined)
-        pixiRendering.sprite.anchor.set(anchor.x, anchor.y);
+      if (anchor !== undefined && pixiRendering.pixiObj instanceof PIXI.Sprite)
+        pixiRendering.pixiObj.anchor.set(anchor.x, anchor.y);
 
       // Update scale if applicable
-      if (scale !== undefined) pixiRendering.sprite.scale.set(scale.x, scale.y);
+      if (scale !== undefined)
+        pixiRendering.pixiObj.scale.set(scale.x, scale.y);
     }
   }
 
   private getPixiRenderingComponents(entity: YaveEntity): PixiRendering[] {
-    return [
-      entity.components.get(SpriteRendering),
-      entity.components.get(TextRendering),
-    ].filter(component => component !== undefined && component !== null);
+    return supportedRenderingComponents
+      .map(componentClass => entity.components.get(componentClass))
+      .filter(component => component !== undefined && component !== null);
   }
 
   private addToRenderingEngine(pixiRendering: PixiRendering): void {
     this.yaveEngine?.rendering.renderingEngine?.stage.addChild(
-      pixiRendering.sprite
+      pixiRendering.pixiObj
     );
     pixiRendering.addedToEngine = true;
   }

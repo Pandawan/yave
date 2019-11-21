@@ -62,6 +62,10 @@ describe('PixiRenderer', () => {
         });
 
         describe('processEntity', () => {
+          const pixiRendering = mockEntity.components.get<PixiRendering>(
+            componentClass
+          );
+
           // When the entity already exists
           it("should automatically add pre-existing entity's sprite to the rendering engine", () => {
             component.addedToEngine = false;
@@ -70,21 +74,15 @@ describe('PixiRenderer', () => {
             expect(
               pixiRenderer.yaveEngine?.rendering.renderingEngine?.stage.addChild
             ).toBeCalled();
-            expect(
-              mockEntity.components.get<PixiRendering>(componentClass)
-                .addedToEngine
-            ).toBe(true);
+            expect(pixiRendering.addedToEngine).toBe(true);
           });
 
           it("should update the sprite's position", () => {
             (pixiRenderer as any).processEntity(mockEntity);
 
             const pos = mockEntity.components.get(Position);
-            const pixiRendering = mockEntity.components.get<PixiRendering>(
-              componentClass
-            );
-            expect(pixiRendering.sprite.position.x).toBe(pos.x);
-            expect(pixiRendering.sprite.position.y).toBe(pos.y);
+            expect(pixiRendering.pixiObj.position.x).toBe(pos.x);
+            expect(pixiRendering.pixiObj.position.y).toBe(pos.y);
           });
 
           it("should update the sprite's rotation (when there is one)", () => {
@@ -93,11 +91,8 @@ describe('PixiRenderer', () => {
             (pixiRenderer as any).processEntity(mockEntity);
 
             const rot = mockEntity.components.get(Rotation);
-            const pixiRendering = mockEntity.components.get<PixiRendering>(
-              componentClass
-            );
 
-            expect(pixiRendering.sprite.angle).toBe(rot.z);
+            expect(pixiRendering.pixiObj.angle).toBe(rot.z);
           });
 
           it("should update the sprite's scale (when there is one)", () => {
@@ -106,27 +101,24 @@ describe('PixiRenderer', () => {
             (pixiRenderer as any).processEntity(mockEntity);
 
             const scale = mockEntity.components.get(Scale);
-            const pixiRendering = mockEntity.components.get<PixiRendering>(
-              componentClass
-            );
 
-            expect(pixiRendering.sprite.scale.x).toBe(scale.x);
-            expect(pixiRendering.sprite.scale.y).toBe(scale.y);
+            expect(pixiRendering.pixiObj.scale.x).toBe(scale.x);
+            expect(pixiRendering.pixiObj.scale.y).toBe(scale.y);
           });
 
-          it("should update the sprite's anchor (when there is one)", () => {
-            mockEntity.components.add(new Anchor(0.25, 0.75));
+          if (pixiRendering.pixiObj instanceof PIXI.Sprite)
+            it("should update the sprite's anchor (when there is one)", () => {
+              mockEntity.components.add(new Anchor(0.25, 0.75));
 
-            (pixiRenderer as any).processEntity(mockEntity);
+              (pixiRenderer as any).processEntity(mockEntity);
 
-            const anchor = mockEntity.components.get(Anchor);
-            const pixiRendering = mockEntity.components.get<PixiRendering>(
-              componentClass
-            );
+              const anchor = mockEntity.components.get(Anchor);
 
-            expect(pixiRendering.sprite.anchor.x).toBe(anchor.x);
-            expect(pixiRendering.sprite.anchor.y).toBe(anchor.y);
-          });
+              const sprite = pixiRendering.pixiObj as PIXI.Sprite;
+
+              expect(sprite.anchor.x).toBe(anchor.x);
+              expect(sprite.anchor.y).toBe(anchor.y);
+            });
         });
       });
     }
@@ -150,6 +142,7 @@ describe('PixiRenderer', () => {
     });
   });
 
+  // TODO: Should this be moved to another file
   describe('TextRendering', () => {
     beforeEach(() => {
       mockEntity = new YaveEntity();

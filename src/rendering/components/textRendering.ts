@@ -31,10 +31,9 @@ export class TextRendering extends PixiRendering {
   }
 
   /**
-   * The PIXI.Text object.
-   * Note: PIXI.Text extends PIXI.Sprite, but we need a generic SpriteRendering for this.
+   * The underlying generic PIXI object.
    */
-  public get sprite(): PIXI.Sprite {
+  public get pixiObj(): PIXI.Container {
     return this.textObject;
   }
 
