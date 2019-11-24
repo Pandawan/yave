@@ -41,8 +41,7 @@ describe('PixiRenderer', () => {
         // Run tests for both SpriteRendering & TextRendering
         beforeEach(() => {
           mockEntity = new YaveEntity();
-          mockEntity.components.add(new Position(1, 2, 3));
-          mockEntity.components.add(component);
+          mockEntity.components.add(new Position(1, 2, 3), component);
         });
 
         describe('onEntityAdded', () => {
@@ -62,12 +61,11 @@ describe('PixiRenderer', () => {
         });
 
         describe('processEntity', () => {
-          const pixiRendering = mockEntity.components.get<PixiRendering>(
-            componentClass
-          );
-
           // When the entity already exists
           it("should automatically add pre-existing entity's sprite to the rendering engine", () => {
+            const pixiRendering = mockEntity.components.get<PixiRendering>(
+              componentClass
+            );
             component.addedToEngine = false;
             (pixiRenderer as any).processEntity(mockEntity);
 
@@ -78,6 +76,9 @@ describe('PixiRenderer', () => {
           });
 
           it("should update the sprite's position", () => {
+            const pixiRendering = mockEntity.components.get<PixiRendering>(
+              componentClass
+            );
             (pixiRenderer as any).processEntity(mockEntity);
 
             const pos = mockEntity.components.get(Position);
@@ -86,6 +87,9 @@ describe('PixiRenderer', () => {
           });
 
           it("should update the sprite's rotation (when there is one)", () => {
+            const pixiRendering = mockEntity.components.get<PixiRendering>(
+              componentClass
+            );
             mockEntity.components.add(new Rotation(45));
 
             (pixiRenderer as any).processEntity(mockEntity);
@@ -96,6 +100,9 @@ describe('PixiRenderer', () => {
           });
 
           it("should update the sprite's scale (when there is one)", () => {
+            const pixiRendering = mockEntity.components.get<PixiRendering>(
+              componentClass
+            );
             mockEntity.components.add(new Scale(1, 2));
 
             (pixiRenderer as any).processEntity(mockEntity);
@@ -106,8 +113,11 @@ describe('PixiRenderer', () => {
             expect(pixiRendering.pixiObj.scale.y).toBe(scale.y);
           });
 
-          if (pixiRendering.pixiObj instanceof PIXI.Sprite)
+          if (component instanceof SpriteRendering)
             it("should update the sprite's anchor (when there is one)", () => {
+              const pixiRendering = mockEntity.components.get<PixiRendering>(
+                componentClass
+              );
               mockEntity.components.add(new Anchor(0.25, 0.75));
 
               (pixiRenderer as any).processEntity(mockEntity);

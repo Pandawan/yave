@@ -1,6 +1,9 @@
 export abstract class AbstractRendering<T> {
   public renderingEngine: T | null = null;
 
+  /**
+   * HTML Element to render in.
+   */
   protected readonly container: HTMLElement;
 
   /**
@@ -19,6 +22,12 @@ export abstract class AbstractRendering<T> {
    * Use this to implement any rendering engine setup.
    */
   abstract init(): void;
+
+  /**
+   * Called after initialization of Rendering.
+   * Use this to implement any resource loading.
+   */
+  abstract load(): Promise<void>;
 
   /**
    * Called after calling all render systems.

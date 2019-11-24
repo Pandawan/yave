@@ -26,5 +26,8 @@ export class TilemapRendering extends PixiRendering {
     this.tileLayer = new PIXI.tilemap.CompositeRectTileLayer(0, textures);
   }
 
-  // TODO: Add Utility functions to set/get tiles, etc.
+  /**
+   * TODO: Create a "tilemap" component which handles the actual tilemap data,
+   * then create a system which "renders" the tilemap's data into the tilemapRendering component.
+   */
 }

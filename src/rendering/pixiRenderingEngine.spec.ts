@@ -1,4 +1,4 @@
-import { PixiRendering } from './pixiRendering';
+import { PixiRenderingEngine } from './pixiRenderingEngine';
 import PIXI from '../lib/pixi';
 
 describe('PixiRendering', () => {
@@ -9,16 +9,27 @@ describe('PixiRendering', () => {
 
   describe('initial', () => {
     it('should have a null renderingEngine', () => {
-      const pixiRendering = new PixiRendering('game');
+      const pixiRendering = new PixiRenderingEngine('game');
       expect(pixiRendering.renderingEngine).toBeNull();
     });
   });
 
   describe('initialization', () => {
     it('should create a new Pixi Application', () => {
-      const pixiRendering = new PixiRendering('game');
+      const pixiRendering = new PixiRenderingEngine('game');
       pixiRendering.init();
       expect(pixiRendering.renderingEngine).toBeInstanceOf(PIXI.Application);
+    });
+  });
+
+  describe('resource loading', () => {
+    it('should wait for the loader to load', async () => {
+      const pixiRendering = new PixiRenderingEngine('game');
+      pixiRendering.loader.load = jest.fn((cb: Function) => {
+        cb();
+      }) as any;
+
+      await pixiRendering.load();
     });
   });
 });

@@ -43,58 +43,64 @@ describe('YaveEngine', () => {
   });
 
   describe('initialization', () => {
-    it('should call onInit after initialization', () => {
+    it('should call onInit after initialization', async () => {
       const onInitSpy = jest.fn();
       engine.onInit.subscribe(onInitSpy);
-      engine.init();
+      await engine.init();
       expect(onInitSpy).toBeCalled();
     });
 
-    it('should be running', () => {
-      engine.init();
+    it('should be running', async () => {
+      await engine.init();
       expect(engine.status).toBe('running');
     });
 
-    it('should be initializing the rendering engine', () => {
+    it('should be initializing the rendering engine', async () => {
       engine.rendering.init = jest.fn();
-      engine.init();
+      await engine.init();
       expect(engine.rendering.init).toBeCalled();
     });
 
-    it('should be executing the game loop', () => {
-      engine.init();
+    it('should load resources on the rendering engine', async () => {
+      engine.rendering.load = jest.fn();
+      await engine.init();
+      expect(engine.rendering.load).toBeCalled();
+    });
+
+    it('should be executing the game loop', async () => {
+      await engine.init();
       expect(typeof (engine as any)._frameId).toBe('number');
     });
 
-    it('should throw when trying to init while already running', () => {
-      engine.init();
-      expect(() => engine.init()).toThrow();
+    it('should throw when trying to init while already running', async () => {
+      await engine.init();
+      expect(engine.init()).rejects.toThrow();
     });
   });
 
   describe('pause', () => {
-    it('should be paused when calling setPaused(true) while running', () => {
-      engine.init();
+    it('should be paused when calling setPaused(true) while running', async () => {
+      await engine.init();
       engine.setPaused(true);
       expect(engine.status).toBe('paused');
     });
 
-    it('should be paused when calling setPaused(true) while already paused', () => {
-      engine.init();
+    it('should be paused when calling setPaused(true) while already paused', async () => {
+      await engine.init();
       engine.setPaused(true);
       engine.setPaused(true);
       expect(engine.status).toBe('paused');
     });
 
-    it('should be running when calling setPaused(false) while paused', () => {
-      engine.init();
+    it('should be running when calling setPaused(false) while paused', async () => {
+      await engine.init();
       engine.setPaused(true);
       engine.setPaused(false);
       expect(engine.status).toBe('running');
     });
 
-    it('should be running when calling setPaused(false) while already running', () => {
-      engine.init();
+    it('should be running when calling setPaused(false) while already running', async () => {
+      await engine.init();
       engine.setPaused(false);
       expect(engine.status).toBe('running');
     });
@@ -106,7 +112,7 @@ describe('YaveEngine', () => {
   });
 
   describe('update', () => {
-    it('should call onUpdate on every update', done => {
+    it('should call onUpdate on every update', async done => {
       const onUpdateSpy = jest.fn((delta: number | undefined) => {
         // Check that the parameter passed is a number
         expect(typeof delta).toBe('number');
@@ -114,12 +120,12 @@ describe('YaveEngine', () => {
       });
 
       engine.onUpdate.subscribe(onUpdateSpy);
-      engine.init();
+      await engine.init();
     });
   });
 
   describe('render', () => {
-    it('should call onRender on every render', done => {
+    it('should call onRender on every render', async done => {
       const onRenderSpy = jest.fn((delta: number | undefined) => {
         // Check that the parameter passed is a number
         expect(typeof delta).toBe('number');
@@ -127,39 +133,39 @@ describe('YaveEngine', () => {
       });
 
       engine.onRender.subscribe(onRenderSpy);
-      engine.init();
+      await engine.init();
     });
 
-    it("should call the rendering engine's render function", () => {
+    it("should call the rendering engine's render function", async () => {
       engine.rendering.render = jest.fn();
-      engine.init();
+      await engine.init();
       expect(engine.rendering.render).toBeCalled();
     });
   });
 
   describe('stop', () => {
-    it('should call onStop before stopping', () => {
+    it('should call onStop before stopping', async () => {
       const onStopSpy = jest.fn();
       engine.onStop.subscribe(onStopSpy);
-      engine.init();
+      await engine.init();
       engine.stop();
       expect(onStopSpy).toBeCalled();
     });
 
-    it('should be stopped', () => {
-      engine.init();
+    it('should be stopped', async () => {
+      await engine.init();
       engine.stop();
       expect(engine.status).toBe('stopped');
     });
 
-    it('should not be executing the game loop', () => {
-      engine.init();
+    it('should not be executing the game loop', async () => {
+      await engine.init();
       engine.stop();
       expect((engine as any)._frameId).toBe(undefined);
     });
 
-    it('should throw when trying to stop while already stopped', () => {
-      engine.init();
+    it('should throw when trying to stop while already stopped', async () => {
+      await engine.init();
       engine.stop();
       expect(() => engine.stop()).toThrow();
     });

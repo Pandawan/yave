@@ -1,8 +1,9 @@
-import { AbstractRendering } from './rendering';
+import { AbstractRendering } from './renderingEngine';
 
 describe('AbstractRendering', () => {
   class MockRendering extends AbstractRendering<{}> {
     init = jest.fn();
+    load = jest.fn();
     render = jest.fn();
   }
 

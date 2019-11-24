@@ -5,7 +5,7 @@ import {
   ISimpleEvent,
 } from 'strongly-typed-events';
 import { YaveECS, RunOptions } from './ecs';
-import { PixiRendering } from './rendering/pixiRendering';
+import { PixiRenderingEngine } from './rendering/pixiRenderingEngine';
 
 /**
  * The main class for the Yave Engine.
@@ -50,7 +50,7 @@ export class YaveEngine {
    * I tried with YaveEngine<RenderingEngine extends AbstractRendering<any> = PixiRendering>
    * but you also have to pass the object (or constructor) for PixiRendering to YaveEngine's constructor, which is ugly.
    */
-  public rendering: PixiRendering;
+  public rendering: PixiRenderingEngine;
 
   /**
    * How long (in ms) to wait between updates.
@@ -60,7 +60,7 @@ export class YaveEngine {
   constructor(containerId = 'game') {
     // Important sub-engines are setup here
     this.ecs = new YaveECS(this);
-    this.rendering = new PixiRendering(containerId);
+    this.rendering = new PixiRenderingEngine(containerId);
   }
 
   /**
@@ -102,17 +102,22 @@ export class YaveEngine {
    * Initialize the engine and start it.
    * This will also call onInit.
    */
-  public init(): void {
+  public async init(): Promise<void> {
     if (this._status === 'running' || this._status === 'paused')
       throw new Error('Engine is already running (or paused)');
 
     this._status = 'running';
+
     // Initialize the rendering engine
     this.rendering.init();
+
+    // Load resources for rendering engine
+    await this.rendering.load();
+
     // Start the game loop
     this.frame(performance.now());
+
     this._onInit.dispatch();
-    // TODO: Find a way to blocking async load the pixi sprites. Perhaps some sort of renderingEngine implementation which has async events that are all called and awaited for.
   }
 
   /**

@@ -1,7 +1,12 @@
 import PIXI from '../lib/pixi';
-import { AbstractRendering } from './rendering';
+import { AbstractRendering } from './renderingEngine';
 
-export class PixiRendering extends AbstractRendering<PIXI.Application> {
+export class PixiRenderingEngine extends AbstractRendering<PIXI.Application> {
+  /**
+   * Resource Loader for PIXI
+   */
+  public readonly loader: PIXI.Loader = new PIXI.Loader();
+
   init(): void {
     // TODO: Might want to switch this to a PIXI.Renderer + PIXI.Container
     this.renderingEngine = new PIXI.Application({
@@ -21,6 +26,15 @@ export class PixiRendering extends AbstractRendering<PIXI.Application> {
     });
 
     this.container.appendChild(this.renderingEngine.view);
+  }
+
+  load(): Promise<void> {
+    // Create a promise that returns once the resource loader has finished loading.
+    return new Promise(resolve => {
+      this.loader.load(() => {
+        resolve();
+      });
+    });
   }
 
   render(): void {
