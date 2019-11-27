@@ -29,6 +29,13 @@ describe('Rotation Component', () => {
       expect(rot.y).toBe(45); // Above range
       expect(rot.z).toBe(60); // More than one revolution
     });
+
+    it('should set the pivot point to the center by default', () => {
+      const rot = new Rotation();
+      expect(rot.pivot.x).toBe(0);
+      expect(rot.pivot.y).toBe(0);
+      expect(rot.pivot.z).toBe(0);
+    });
   });
 
   describe('fromRadians', () => {

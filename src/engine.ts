@@ -218,6 +218,6 @@ export class YaveEngine {
     this.ecs.run(runOptions);
 
     // Render the view with rendering engine
-    this.rendering.render();
+    this.rendering.render(delta);
   }
 }

@@ -21,14 +21,15 @@ export class SpriteRendering extends PixiRendering {
   }
 
   /**
-   * The transparency of the sprite (from 0 to 1);
+   * The origin position of the texture (between 0 and 1).
+   * Note: This is different from pivot point.
    */
-  public get alpha(): number {
-    return this.sprite.alpha;
+  public get anchor(): PIXI.ObservablePoint {
+    return this.sprite.anchor;
   }
 
-  public set alpha(value: number) {
-    this.sprite.alpha = value;
+  public set anchor(value: PIXI.ObservablePoint) {
+    this.sprite.anchor = value;
   }
 
   /**
@@ -51,11 +52,11 @@ export class SpriteRendering extends PixiRendering {
     if (sprite instanceof PIXI.Sprite) {
       this.sprite = sprite;
     } else {
-      // TODO: Add (option to use) more optimized asset loader from pixi
       this.sprite = PIXI.Sprite.from(sprite);
     }
 
     this.color = color;
     this.alpha = alpha;
+    this.anchor.set(0.5, 0.5);
   }
 }

@@ -1,7 +1,6 @@
 import PIXI from '../../lib/pixi';
 import { PixiRendering } from './pixiRendering';
 
-// TODO: Should this extend PixiRendering like the other components?
 export class TilemapRendering extends PixiRendering {
   /**
    * The actual PIXI.tilemap object.

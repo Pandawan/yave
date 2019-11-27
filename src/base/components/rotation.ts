@@ -1,5 +1,5 @@
 import { Component } from '@trixt0r/ecs';
-import { normalize } from '../../utils';
+import { normalize, Vector } from '../../utils';
 
 /**
  * Rotation Component to represent an entity's rotation in world space.
@@ -17,6 +17,11 @@ export class Rotation implements Component {
    * Rotation on the z axis (in degrees).
    */
   public z: number;
+
+  /**
+   * Pivot point to rotate around.
+   */
+  public pivot: Vector;
 
   /**
    * Access the rotation values in radians.
@@ -112,6 +117,9 @@ export class Rotation implements Component {
       this.y = clampedY ?? 0;
       this.z = clampedZ ?? 0;
     }
+
+    // Set default pivot point in the middle
+    this.pivot = new Vector(0, 0, 0);
   }
 
   /**

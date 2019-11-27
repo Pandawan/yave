@@ -4,7 +4,7 @@ import { SpriteRendering } from '../components/spriteRendering';
 import { PixiRendering } from '../components/pixiRendering';
 import { TextRendering } from '../components/textRendering';
 import { TilemapRendering } from '../components/tilemapRendering';
-import { Anchor, Position, Rotation, Scale } from '../../base';
+import { Position, Rotation, Scale } from '../../base';
 
 const supportedRenderingComponents: ComponentClass<PixiRendering>[] = [
   SpriteRendering,
@@ -61,9 +61,8 @@ export class PixiRenderer extends YaveRenderingSystem {
 
     for (const pixiRendering of pixiRenderingComponents) {
       const position = entity.components.get(Position);
-      // Rotation, Anchor and Scale are not required so they could be undefined
+      // Rotation, Pivot and Scale are not required so they could be undefined
       const rotation = entity.components.get(Rotation) as Rotation | undefined;
-      const anchor = entity.components.get(Anchor) as Anchor | undefined;
       const scale = entity.components.get(Scale) as Scale | undefined;
 
       // Add the object to rendering engine if not already done
@@ -76,11 +75,12 @@ export class PixiRenderer extends YaveRenderingSystem {
       pixiRendering.pixiObj.zIndex = position.z;
 
       // Update rotation if applicable
-      if (rotation !== undefined) pixiRendering.pixiObj.angle = rotation.z;
-
-      // Update anchor if applicable
-      if (anchor !== undefined && pixiRendering.pixiObj instanceof PIXI.Sprite)
-        pixiRendering.pixiObj.anchor.set(anchor.x, anchor.y);
+      if (rotation !== undefined) {
+        pixiRendering.pixiObj.angle = rotation.z;
+        // TODO: Right now, pivot is from 0 to texture size, might want to set it from 0 to 1 by doing pivot * size
+        // TODO: Scale should be the same for all objects. An object with scale 1 should be the exact same size as another even with different texture sizes
+        pixiRendering.pixiObj.pivot.set(rotation.pivot.x, rotation.pivot.y);
+      }
 
       // Update scale if applicable
       if (scale !== undefined)
@@ -95,9 +95,7 @@ export class PixiRenderer extends YaveRenderingSystem {
   }
 
   private addToRenderingEngine(pixiRendering: PixiRendering): void {
-    this.yaveEngine?.rendering.renderingEngine?.stage.addChild(
-      pixiRendering.pixiObj
-    );
+    this.yaveEngine?.rendering.world?.addChild(pixiRendering.pixiObj);
     pixiRendering.addedToEngine = true;
   }
 }

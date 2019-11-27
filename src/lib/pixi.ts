@@ -2,5 +2,6 @@
 import PIXI = require('pixi.js'); // TODO: Perhaps use @pixi/packages instead
 window.PIXI = PIXI;
 import 'pixi-tilemap';
+export { Viewport } from 'pixi-viewport';
 
 export default PIXI;

@@ -30,6 +30,19 @@ export class TextRendering extends PixiRendering {
     this.textObject.style = value;
   }
 
+  // TODO: Kind of ugly, there's code duplication between spriteRendering and textRendering
+  /**
+   * The origin position of the texture (between 0 and 1).
+   * Note: This is different from pivot point.
+   */
+  public get anchor(): PIXI.ObservablePoint {
+    return this.textObject.anchor;
+  }
+
+  public set anchor(value: PIXI.ObservablePoint) {
+    this.textObject.anchor = value;
+  }
+
   /**
    * The underlying generic PIXI object.
    */
@@ -62,5 +75,6 @@ export class TextRendering extends PixiRendering {
     }
 
     this.textObject = new PIXI.Text(text, style);
+    this.anchor.set(0.5, 0.5);
   }
 }

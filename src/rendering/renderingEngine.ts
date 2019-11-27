@@ -32,6 +32,7 @@ export abstract class AbstractRendering<T> {
   /**
    * Called after calling all render systems.
    * Use this to actually render the view.
+   * @param dt Change in time since last frame
    */
-  abstract render(): void;
+  abstract render(dt: number): void;
 }

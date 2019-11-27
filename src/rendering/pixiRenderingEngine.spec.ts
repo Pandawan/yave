@@ -32,4 +32,21 @@ describe('PixiRendering', () => {
       await pixiRendering.load();
     });
   });
+
+  describe('rendering', () => {
+    it('should tell the renderingEngine to render', () => {
+      const pixiRendering = new PixiRenderingEngine('game');
+      pixiRendering.renderingEngine = {
+        render: jest.fn(),
+      } as any;
+      pixiRendering.world = {
+        update: jest.fn(),
+      } as any;
+
+      pixiRendering.render(1);
+
+      expect(pixiRendering.renderingEngine?.render).toBeCalled();
+      expect(pixiRendering.world?.update).toBeCalled();
+    });
+  });
 });
