@@ -38,7 +38,7 @@ describe('YaveEngine', () => {
     });
 
     it('should not be executing the game loop', () => {
-      expect((engine as any)._frameId).toBe(undefined);
+      expect((engine as any)._frameId).toBeNull();
     });
   });
 
@@ -161,7 +161,7 @@ describe('YaveEngine', () => {
     it('should not be executing the game loop', async () => {
       await engine.init();
       engine.stop();
-      expect((engine as any)._frameId).toBe(undefined);
+      expect((engine as any)._frameId).toBeNull();
     });
 
     it('should throw when trying to stop while already stopped', async () => {

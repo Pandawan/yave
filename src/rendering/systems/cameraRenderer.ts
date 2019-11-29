@@ -45,7 +45,6 @@ export class CameraRenderer extends YaveRenderingSystem {
     const camera = entity.components.get(Camera);
     const position = entity.components.get(Position);
     const rotation = entity.components.get(Rotation) as Rotation | undefined;
-    // const scale = entity.components.get(Scale) as Scale | undefined;
 
     const world = this.yaveEngine.rendering.world;
 

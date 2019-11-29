@@ -2,9 +2,22 @@ import { Component } from '@trixt0r/ecs';
 
 /**
  * Position Component to represent an entity's position in world space.
- * TODO: Maybe this should extend from Vector so I don't have to repeat myself
+ * TODO: There's code duplication between this and scale (except scale's constructor works slightly differently).
  */
 export class Position implements Component {
+  /**
+   * Position on the x axis.
+   */
+  public x: number;
+  /**
+   * Position on the y axis
+   */
+  public y: number;
+  /**
+   * Position on the z axis.
+   */
+  public z: number;
+
   /**
    * Create a position component with default values of 0.
    */
@@ -17,7 +30,11 @@ export class Position implements Component {
    * Create a 3D position component.
    */
   constructor(x: number, y: number, z: number);
-  constructor(public x = 0, public y = 0, public z = 0) {}
+  constructor(x = 0, y = 0, z = 0) {
+    this.x = x ?? 0;
+    this.y = y ?? 0;
+    this.z = z ?? 0;
+  }
 
   /**
    * Set the values of the position.
