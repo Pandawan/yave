@@ -52,6 +52,8 @@ export class CameraRenderer extends YaveRenderingSystem {
     // If there's no world/viewport, we don't care
     if (world === null || world === undefined) return;
 
+    // TODO: Maybe follow entity should be a separate system from camera?
+    // TODO: Also viewport has a follow property to follow a PixiObject, is that worth it? (probs not)
     // If have an entity to follow, set camera's position to that
     if (camera.followEntity !== null) {
       // Get the entity with followEntity ID
@@ -98,7 +100,6 @@ export class CameraRenderer extends YaveRenderingSystem {
       world.pivot.set(rotation.pivot.x, rotation.pivot.y);
     }
 
-    // TODO: Can also use scale component for camera zoom? Or maybe that should be part of camera component?
-    // Also create a spec.
+    // TODO: I don't need it right now but maybe in the future, add zoom, bounds, etc.
   }
 }
