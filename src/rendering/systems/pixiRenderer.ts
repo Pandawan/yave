@@ -1,5 +1,5 @@
 import { ComponentClass } from '@trixt0r/ecs';
-import { YaveRenderingSystem, YaveEntity } from '../../ecs';
+import { YaveEntityRenderingSystem, YaveEntity } from '../../ecs';
 import { SpriteRendering } from '../components/spriteRendering';
 import { PixiRendering } from '../components/pixiRendering';
 import { TextRendering } from '../components/textRendering';
@@ -15,7 +15,7 @@ const supportedRenderingComponents: ComponentClass<PixiRendering>[] = [
 /**
  * Rendering System for SpriteRendering and TextRendering component.
  */
-export class PixiRenderer extends YaveRenderingSystem {
+export class PixiRenderer extends YaveEntityRenderingSystem {
   constructor() {
     super(undefined, [Position], undefined, supportedRenderingComponents);
   }

@@ -3,7 +3,7 @@
  */
 export interface RunOptions {
   /**
-   * Change in time since last update/frame.
+   * Change in time since last update/frame (in ms).
    */
   deltaTime: number;
   /**

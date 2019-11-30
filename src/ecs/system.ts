@@ -1,13 +1,12 @@
-import { AbstractEntitySystem } from '@trixt0r/ecs';
-import { YaveEntity } from './entity';
+import { System } from '@trixt0r/ecs';
 import { RunOptions } from './runOptions';
 import { YaveEngine } from '../engine';
 import { YaveECS } from './ecs';
 
 /**
- * Simple wrapper over System with support for YaveEntity
+ * Basic ECS System.
  */
-export abstract class YaveSystem extends AbstractEntitySystem<YaveEntity> {
+export abstract class YaveSystem extends System {
   /**
    * The reference to the Yave engine.
    */
@@ -43,31 +42,11 @@ export abstract class YaveSystem extends AbstractEntitySystem<YaveEntity> {
   }
 
   /** @inheritdoc */
-  process(options?: RunOptions): void {
-    if (this._engine === null || this._engine === undefined) return;
-
-    // Only run this system IF (rendering & isRenderSystem) OR (not rendering && not isRenderSystem)
-    if (options !== undefined && options.isRendering !== this.isRenderSystem)
-      return;
-
-    const entities =
-      this.aspect !== null && this.aspect !== undefined
-        ? this.aspect.entities
-        : this._engine.entities.elements;
-
-    for (let i = 0, l = entities.length; i < l; i++) {
-      this.processEntity(
-        entities[i] as YaveEntity,
-        i,
-        entities as YaveEntity[],
-        options
-      );
-    }
-  }
+  abstract process(options?: RunOptions): void | Promise<void>;
 }
 
 /**
- * Simple wrapper over YaveSystem which automatically sets `isRenderSystem` to true
+ * Basic ECS System meant to run during the Render loop.
  */
 export abstract class YaveRenderingSystem extends YaveSystem {
   /** @inheritdoc */

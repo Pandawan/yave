@@ -1,11 +1,11 @@
-import { YaveRenderingSystem, YaveEntity, RunOptions } from '../../ecs';
+import { YaveEntityRenderingSystem, YaveEntity, RunOptions } from '../../ecs';
 import { Position, Rotation } from '../../base';
 import { Camera } from '../components/camera';
 
 /**
  * Rendering System for SpriteRendering and TextRendering component.
  */
-export class CameraRenderer extends YaveRenderingSystem {
+export class CameraRenderer extends YaveEntityRenderingSystem {
   constructor() {
     super(undefined, [Camera, Position], undefined);
   }

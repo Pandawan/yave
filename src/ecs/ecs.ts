@@ -14,6 +14,8 @@ export class YaveECS extends Engine {
     this.yaveEngine = engine;
   }
 
+  // TODO: Do System isRenderingSystem check here so taht I don't have to do it manually
+
   /**
    * Updates all systems in this engine with the given options.
    *
