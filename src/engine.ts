@@ -6,6 +6,7 @@ import {
 } from 'strongly-typed-events';
 import { YaveECS, RunOptions } from './ecs';
 import { PixiRenderingEngine } from './rendering/pixiRenderingEngine';
+import { YaveInput } from './input';
 
 /**
  * The main class for the Yave Engine.
@@ -41,7 +42,7 @@ export class YaveEngine {
   /**
    * The Entity Component System engine.
    */
-  public ecs: YaveECS;
+  public readonly ecs: YaveECS;
 
   /**
    * The Rendering engine.
@@ -50,17 +51,24 @@ export class YaveEngine {
    * I tried with YaveEngine<RenderingEngine extends AbstractRendering<any> = PixiRendering>
    * but you also have to pass the object (or constructor) for PixiRendering to YaveEngine's constructor, which is ugly.
    */
-  public rendering: PixiRenderingEngine;
+  public readonly rendering: PixiRenderingEngine;
+
+  /**
+   * The Input system.
+   */
+  public readonly input: YaveInput;
 
   /**
    * How long (in ms) to wait between updates.
    */
   public timeStep = 33;
 
+  // TODO: Add Options object so you can specify whether or not YaveInput should register default keybindings
   constructor(containerId = 'game') {
     // Important sub-engines are setup here
     this.ecs = new YaveECS(this);
     this.rendering = new PixiRenderingEngine(containerId);
+    this.input = new YaveInput(containerId);
   }
 
   /**
@@ -114,6 +122,9 @@ export class YaveEngine {
     // Load resources for rendering engine
     await this.rendering.load();
 
+    // Initialize the Input system
+    this.input.init();
+
     // Start the game loop
     this.frame(performance.now());
 
@@ -134,6 +145,9 @@ export class YaveEngine {
       cancelAnimationFrame(this._frameId);
       this._frameId = null;
     }
+
+    this.input.stop();
+
     this._status = 'stopped';
   }
 
@@ -197,6 +211,9 @@ export class YaveEngine {
 
     // Run all systems
     this.ecs.run(runOptions);
+
+    // Update the inputs value on update
+    this.input.update();
   }
 
   /**
@@ -219,5 +236,8 @@ export class YaveEngine {
 
     // Render the view with rendering engine
     this.rendering.render(delta);
+
+    // Update the inputs value on render
+    this.input.render();
   }
 }

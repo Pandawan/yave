@@ -95,6 +95,7 @@ export class PixiRenderer extends YaveEntityRenderingSystem {
   }
 
   private addToRenderingEngine(pixiRendering: PixiRendering): void {
+    pixiRendering.pixiObj.sortableChildren = true; // TODO: This might not be a good idea (performance anc confusion for user)
     this.yaveEngine?.rendering.world?.addChild(pixiRendering.pixiObj);
     pixiRendering.addedToEngine = true;
   }

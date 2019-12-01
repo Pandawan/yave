@@ -13,6 +13,9 @@ Yet Another Voxel Engine (written in TS).
 
 ## TODO
 
+- Standardize JSDoc, some have space before params, some have JSDoc typings, etc.
+- Standardize variable names (privates are or are not \_name, etc.)
+- Add an internal unit system (like Unity where 1 unit can be 16px or 32px or however many you want based on texture)
 - Add assemblages
 - Create docs
 
@@ -28,3 +31,7 @@ Yet Another Voxel Engine (written in TS).
 
 - [Anatomy of a Game on MDN](https://developer.mozilla.org/en-US/docs/Games/Anatomy): A great example on how to write a JS game engine loop
 - [GameLoop by sethvincent](https://github.com/sethvincent/gameloop/blob/master/index.js): Implementation of game loop for inspiration
+
+### Inputs
+
+- [Game Inputs by andyhall](https://github.com/andyhall/game-inputs): Good library for game inputs although uses old JS

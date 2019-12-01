@@ -41,6 +41,9 @@ export class PixiRenderingEngine extends AbstractRendering<PIXI.Application> {
       interaction: this.renderingEngine.renderer.plugins.interaction,
     });
 
+    // Tell world to auto-sort by zIndex
+    this.world.sortableChildren = true;
+
     this.renderingEngine.stage.addChild(this.world);
 
     // Auto-resize renderer & viewport/world whenever the window changes size
