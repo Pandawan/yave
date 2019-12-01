@@ -112,10 +112,6 @@ export abstract class YaveEntitySystem extends YaveSystem
   process(options?: RunOptions): void {
     if (this._engine === null || this._engine === undefined) return;
 
-    // Only run this system IF (rendering & isRenderSystem) OR (not rendering && not isRenderSystem)
-    if (options !== undefined && options.isRendering !== this.isRenderSystem)
-      return;
-
     const entities =
       this.aspect !== null && this.aspect !== undefined
         ? this.aspect.entities

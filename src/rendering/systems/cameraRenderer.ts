@@ -1,4 +1,4 @@
-import { YaveEntityRenderingSystem, YaveEntity, RunOptions } from '../../ecs';
+import { YaveEntityRenderingSystem, YaveEntity } from '../../ecs';
 import { Position, Rotation } from '../../base';
 import { Camera } from '../components/camera';
 
@@ -10,12 +10,8 @@ export class CameraRenderer extends YaveEntityRenderingSystem {
     super(undefined, [Camera, Position], undefined);
   }
 
-  process(options?: RunOptions): void {
+  process(): void {
     if (this._engine === null || this._engine === undefined) return;
-
-    // Only run this system IF (rendering & isRenderSystem) OR (not rendering && not isRenderSystem)
-    if (options !== undefined && options.isRendering !== this.isRenderSystem)
-      return;
 
     const entities = (this.aspect !== null && this.aspect !== undefined
       ? this.aspect.entities

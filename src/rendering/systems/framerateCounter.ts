@@ -20,8 +20,8 @@ export class FramerateCounter extends YaveRenderingSystem {
     // TODO: Clean this up so that I don't need all of these in every single system that overrides process
     if (this._engine === null || this._engine === undefined) return;
 
-    // Only run this system IF isRendering
-    if (options === undefined || options.isRendering === false) return;
+    // Need deltaTime
+    if (options === undefined) return;
 
     this.textElement.textContent = `FPS ${Math.round(
       (1 / options.deltaTime) * 1000
