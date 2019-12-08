@@ -1,3 +1,5 @@
+import normalizeWheel from 'normalize-wheel';
+
 interface KeyBindings {
   /**
    * Binding of keycode to an array of [ virtualKeyCodes ]
@@ -9,20 +11,60 @@ interface KeyStates {
   /**
    * State of given key (true for active)
    */
-  [virtualKeyCode: string]: boolean;
+  [virtualKeyCode: string]: {
+    /**
+     * Whether or not the key is currently being pressed.
+     */
+    down: boolean;
+
+    /**
+     * Whether or not the key is currently being held down instead of just pressed.
+     */
+    held: boolean;
+  };
 }
 
 interface CursorState {
+  /**
+   * Current horizontal position (in pixels) of the cursor relative to the game container.
+   */
   x: number;
+  /**
+   * Current vertical position (in pixels) of the cursor relative to the game container.
+   */
   y: number;
+  /**
+   * Change in horizontal position of the cursor (since last render frame) relative to the game container.
+   */
   dx: number;
+  /**
+   * Change in vertical position of the cursor (since last render frame) relative to the game container.
+   */
   dy: number;
+  /**
+   * Change in horizontal scrolling (since last update frame).
+   * A reasonably slow scroll will be approximately 1.
+   * Positive is right; negative is left.
+   */
   scrollx: number;
+  /**
+   * Change in vertical scrolling (since last update frame).
+   * A reasonably slow scroll will be approximately 1.
+   * Positive is down; negative is up.
+   */
   scrolly: number;
+  /**
+   * Whether or not the pointer is currently locked.
+   */
+  locked: boolean;
 }
 
 export class YaveInput {
-  // TODO: Pointer lock & scrolling
+  /**
+   * Whether or not YaveInput should try to lock the cursor.
+   */
+  public lockCursor: boolean;
+
   private readonly _bindings: KeyBindings;
 
   private readonly _keys: KeyStates;
@@ -49,8 +91,9 @@ export class YaveInput {
   /**
    * Create an Input manager.
    * @param containerId The HTML #id of the container to handle input events from.
+   * @param lockCursor Whether or not to automatically lock the cursor when clicking the game view.
    */
-  constructor(containerId: string) {
+  constructor(containerId: string, lockCursor = true) {
     const container = document.getElementById(containerId);
     if (container === null)
       throw new Error(`Could not find an element with id ${containerId}`);
@@ -58,6 +101,7 @@ export class YaveInput {
 
     this._bindings = {};
     this._keys = {};
+    this.lockCursor = lockCursor;
     this._cursor = {
       x: 0,
       y: 0,
@@ -65,26 +109,35 @@ export class YaveInput {
       dy: 0,
       scrollx: 0,
       scrolly: 0,
+      locked: false,
     };
+
+    this.onKeyDownEvent = this.onKeyDownEvent.bind(this);
+    this.onKeyUpEvent = this.onKeyUpEvent.bind(this);
+    this.onMouseDownEvent = this.onMouseDownEvent.bind(this);
+    this.onMouseUpEvent = this.onMouseUpEvent.bind(this);
+    this.onMouseMoveEvent = this.onMouseMoveEvent.bind(this);
+    this.onMouseWheelEvent = this.onMouseWheelEvent.bind(this);
+    this.onContextMenu = this.onContextMenu.bind(this);
+    this.onClickContainer = this.onClickContainer.bind(this);
   }
 
   /**
    * Initialize the input system, registering all key event listeners.
    */
   public init(): void {
-    window.addEventListener('keydown', this.onKeyDownEvent.bind(this));
-    window.addEventListener('keyup', this.onKeyUpEvent.bind(this));
+    window.addEventListener('keydown', this.onKeyDownEvent, false);
+    window.addEventListener('keyup', this.onKeyUpEvent, false);
     // All mouse events are relative to this._container so that mouse x/y isn't offset if container isn't full screen
+    this._container.addEventListener('mousedown', this.onMouseDownEvent, false);
+    this._container.addEventListener('mouseup', this.onMouseUpEvent, false);
+    this._container.addEventListener('mousemove', this.onMouseMoveEvent, false);
     this._container.addEventListener(
-      'mousedown',
-      this.onMouseDownEvent.bind(this)
+      normalizeWheel.getEventType() as any, // TypeScript doesn't like mousewheel & DOMMouseScroll
+      this.onMouseWheelEvent
     );
-    this._container.addEventListener('mouseup', this.onMouseUpEvent.bind(this));
-    this._container.addEventListener(
-      'mousemove',
-      this.onMouseMoveEvent.bind(this)
-    );
-    this._container.oncontextmenu = this.onContextMenu.bind(this);
+    this._container.oncontextmenu = this.onContextMenu;
+    this._container.addEventListener('click', this.onClickContainer, false);
   }
 
   /**
@@ -99,6 +152,11 @@ export class YaveInput {
    * Render event, cleans up rendering-related values
    */
   public render(): void {
+    // If currently locked, but don't want it locked, stop it immediately
+    if (this._cursor.locked === true && this.lockCursor === false) {
+      document.exitPointerLock();
+    }
+
     // Cursor movement is more "visible" so it's updated on render
     this._cursor.dx = 0;
     this._cursor.dy = 0;
@@ -113,27 +171,76 @@ export class YaveInput {
     this._container.removeEventListener('mousedown', this.onMouseDownEvent);
     this._container.removeEventListener('mouseup', this.onMouseUpEvent);
     this._container.removeEventListener('mousemove', this.onMouseMoveEvent);
+    this._container.removeEventListener(
+      normalizeWheel.getEventType() as any, // TypeScript doesn't like mousewheel & DOMMouseScroll
+      this.onMouseWheelEvent
+    );
     this._container.oncontextmenu = null;
+    this._container.removeEventListener('click', this.onClickContainer);
   }
 
-  private onKeyDownEvent(event: KeyboardEvent): void {
-    const keyCode = event.key.toLowerCase();
+  //#region Event Handler
+
+  private getKeyCode(event: KeyboardEvent | MouseEvent): string {
+    // Keyboard Press
+    if (event instanceof KeyboardEvent) {
+      // Space bar is weird and returns an actual space character
+      if (event.key === ' ' || event.key === 'Spacebar') return 'space';
+
+      return event.key.toLowerCase();
+    }
+    // Mouse Button Press
+    else if (event instanceof MouseEvent) {
+      return `mouse${event.button + 1}`;
+    }
+
+    return '';
+  }
+
+  private onKeyDownEvent(event: KeyboardEvent): boolean {
+    const keyCode = this.getKeyCode(event);
     this.handleKeyEvent(keyCode, true);
+
+    // TODO: Find a way to detect if modifier (meta/shift/alt) keys are being held down
+
+    // Don't want to move between elements
+    if (keyCode === 'tab') {
+      event.preventDefault();
+      return false;
+    }
+    return true;
   }
 
-  private onKeyUpEvent(event: KeyboardEvent): void {
-    const keyCode = event.key.toLowerCase();
+  private onKeyUpEvent(event: KeyboardEvent): boolean {
+    const keyCode = this.getKeyCode(event);
     this.handleKeyEvent(keyCode, false);
+
+    // Don't want to move between elements
+    if (keyCode === 'tab') {
+      event.preventDefault();
+      return false;
+    }
+    return true;
   }
 
   private onMouseDownEvent(event: MouseEvent): void {
-    const keyCode = `mouse${event.button + 1}`;
+    const keyCode = this.getKeyCode(event);
     this.handleKeyEvent(keyCode, true);
   }
 
   private onMouseUpEvent(event: MouseEvent): void {
-    const keyCode = `mouse${event.button + 1}`;
+    const keyCode = this.getKeyCode(event);
     this.handleKeyEvent(keyCode, false);
+  }
+
+  private onMouseWheelEvent(event: WheelEvent | MouseWheelEvent): boolean {
+    const wheelData = normalizeWheel(event);
+    this._cursor.scrollx = wheelData.spinX;
+    this._cursor.scrolly = wheelData.spinY;
+
+    // Prevent scroll event from scrolling through webpage (rubberbanding and such)
+    event.preventDefault();
+    return false;
   }
 
   /**
@@ -142,12 +249,18 @@ export class YaveInput {
    * @param state The state of the key being modified.
    */
   private handleKeyEvent(keyCode: string, state: boolean): void {
+    console.log(state ? 'press' : 'release', keyCode);
     const virtualKeyCodes = this._bindings[keyCode];
 
     if (virtualKeyCodes === undefined) return;
 
     for (const virtualKeyCode of virtualKeyCodes) {
-      this._keys[virtualKeyCode] = state;
+      const previouslyDown = this._keys[virtualKeyCode].down;
+      this._keys[virtualKeyCode] = {
+        down: state,
+        // Held only if it was previously down and it currently is down
+        held: previouslyDown && state,
+      };
     }
   }
 
@@ -166,6 +279,18 @@ export class YaveInput {
     this._cursor.y = event.clientY;
   }
 
+  private onClickContainer(_event: MouseEvent): void {
+    // When click game view & want pointer lock but not locked yet, try to lock
+    if (this.lockCursor === true && this._cursor.locked === false) {
+      this._container.requestPointerLock();
+    }
+  }
+
+  //#endregion Event Handler
+
+  /**
+   * Register default key bindings.
+   */
   public registerDefaultBindings(): void {
     this.addBinding('up', 'w', 'arrowup')
       .addBinding('down', 's', 'arrowdown')
@@ -193,7 +318,7 @@ export class YaveInput {
       this._bindings[keyCode].push(name);
     }
 
-    this._keys[name] = false;
+    this._keys[name] = { down: false, held: false };
 
     return this;
   }
