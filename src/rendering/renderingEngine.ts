@@ -1,3 +1,5 @@
+import { Vector } from '../utils';
+
 export abstract class AbstractRendering<T> {
   public renderingEngine: T | null = null;
 
@@ -35,4 +37,16 @@ export abstract class AbstractRendering<T> {
    * @param dt Change in time since last frame
    */
   abstract render(dt: number): void;
+
+  // TODO: ADD SPEC>TS TEST
+  /**
+   * Converts the given screen position to a world position.
+   * @param screenPosition A position in screen coordinates.
+   */
+  abstract screenToWorldPosition(screenPosition: Vector): Vector;
+  /**
+   * Converts the given world position to a screen position.
+   * @param worldPosition A position in world coordinates.
+   */
+  abstract worldToScreenPosition(worldPosition: Vector): Vector;
 }

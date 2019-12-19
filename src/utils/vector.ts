@@ -2,6 +2,7 @@
  * Represents a position, direction, rotation, etc. (can be used for 2D and 3D coordinates).,
  */
 export class Vector {
+  // TODO: Standardize Vector everywhere (position, rotation, cursor pos, cursor movement, etc.)
   /**
    * Create a Vector with default values of 0
    */

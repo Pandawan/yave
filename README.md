@@ -35,3 +35,4 @@ Yet Another Voxel Engine (written in TS).
 ### Inputs
 
 - [Game Inputs by andyhall](https://github.com/andyhall/game-inputs): Good library for game inputs although uses old JS
+- [Keydrown by Jeremy Kahn](https://jeremyckahn.github.io/keydrown/): Cool library with an inventive way of getting faster response for inputs

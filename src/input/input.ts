@@ -25,6 +25,8 @@ interface KeyStates {
 }
 
 interface CursorState {
+  // TODO: Make x, y, dx, dy based on in-game positions but also provide a non-game version
+  // TODO: Improve performance!
   /**
    * Current horizontal position (in pixels) of the cursor relative to the game container.
    */
@@ -70,6 +72,7 @@ export class YaveInput {
   private readonly _keys: KeyStates;
 
   private readonly _cursor: CursorState;
+  // TODO: Touch events (simply add an extra set of event listeners)
 
   private _container: HTMLElement;
 
@@ -169,7 +172,6 @@ export class YaveInput {
     window.removeEventListener('keydown', this.onKeyDownEvent);
     window.removeEventListener('keyup', this.onKeyUpEvent);
     this._container.removeEventListener('mousedown', this.onMouseDownEvent);
-    this._container.removeEventListener('mouseup', this.onMouseUpEvent);
     this._container.removeEventListener('mousemove', this.onMouseMoveEvent);
     this._container.removeEventListener(
       normalizeWheel.getEventType() as any, // TypeScript doesn't like mousewheel & DOMMouseScroll
@@ -249,7 +251,6 @@ export class YaveInput {
    * @param state The state of the key being modified.
    */
   private handleKeyEvent(keyCode: string, state: boolean): void {
-    console.log(state ? 'press' : 'release', keyCode);
     const virtualKeyCodes = this._bindings[keyCode];
 
     if (virtualKeyCodes === undefined) return;

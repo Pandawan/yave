@@ -1,5 +1,6 @@
 import PIXI, { Viewport } from '../lib/pixi';
 import { AbstractRendering } from './renderingEngine';
+import { Vector } from '../utils';
 
 export class PixiRenderingEngine extends AbstractRendering<PIXI.Application> {
   /**
@@ -77,5 +78,21 @@ export class PixiRenderingEngine extends AbstractRendering<PIXI.Application> {
       }
       this.renderingEngine.render();
     }
+  }
+
+  screenToWorldPosition(screenPosition: Vector): Vector {
+    if (this.world === undefined)
+      throw new Error('World has not yet been initialized.');
+
+    const pos = this.world?.toWorld(screenPosition.x, screenPosition.y);
+    return new Vector(pos?.x ?? 0, pos?.y ?? 0);
+  }
+
+  worldToScreenPosition(worldPosition: Vector): Vector {
+    if (this.world === undefined)
+      throw new Error('World has not yet been initialized.');
+
+    const pos = this.world?.toScreen(worldPosition.x, worldPosition.y);
+    return new Vector(pos?.x ?? 0, pos?.y ?? 0);
   }
 }
