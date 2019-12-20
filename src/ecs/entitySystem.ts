@@ -117,6 +117,10 @@ export abstract class YaveEntitySystem extends YaveSystem
         ? this.aspect.entities
         : this._engine.entities.elements;
 
+    // Extra render system failcheck (just in case)
+    if (options !== undefined && options.isRendering !== this.isRenderSystem)
+      return;
+
     for (let i = 0, l = entities.length; i < l; i++) {
       this.processEntity(
         entities[i] as YaveEntity,

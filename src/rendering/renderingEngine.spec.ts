@@ -5,6 +5,8 @@ describe('AbstractRendering', () => {
     init = jest.fn();
     load = jest.fn();
     render = jest.fn();
+    screenToWorldPosition = jest.fn();
+    worldToScreenPosition = jest.fn();
   }
 
   describe('constructor', () => {

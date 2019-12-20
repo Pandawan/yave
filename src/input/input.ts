@@ -25,6 +25,7 @@ interface KeyStates {
 }
 
 interface CursorState {
+  // TODO: spec.ts file
   // TODO: Make x, y, dx, dy based on in-game positions but also provide a non-game version
   // TODO: Improve performance!
   /**

@@ -49,4 +49,7 @@ describe('PixiRendering', () => {
       expect(pixiRendering.world?.update).toBeCalled();
     });
   });
+
+  test.todo('should convert a screen to world position');
+  test.todo('should convert a world to screen position');
 });

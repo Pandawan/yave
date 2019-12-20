@@ -2,7 +2,6 @@ import { YaveEntity } from '../../ecs/entity';
 import { Position, Rotation } from '../../base';
 import { CameraRenderer } from './cameraRenderer';
 import { Camera } from '../components/camera';
-import { RunOptions } from '../../ecs';
 
 describe('CameraRenderer', () => {
   let mockActiveCameraEntity: YaveEntity;
@@ -47,11 +46,6 @@ describe('CameraRenderer', () => {
   });
 
   describe('choosing camera', () => {
-    const options: RunOptions = {
-      deltaTime: 1,
-      isRendering: true,
-    };
-
     beforeEach(() => {
       (cameraRenderer as any)._engine = {};
     });
@@ -61,7 +55,7 @@ describe('CameraRenderer', () => {
         entities: cameraRenderer.yaveEngine?.ecs.entities,
       };
       (cameraRenderer as any).processEntity = jest.fn();
-      cameraRenderer.process(options);
+      cameraRenderer.process();
       // Make sure it called the active camera
       expect(cameraRenderer.processEntity).toBeCalledWith(
         mockActiveCameraEntity
@@ -75,7 +69,7 @@ describe('CameraRenderer', () => {
       (cameraRenderer as any).aspect = {
         entities: [mockActiveCameraEntity, mockInactiveCameraEntity],
       };
-      expect(() => cameraRenderer.process(options)).toThrow();
+      expect(() => cameraRenderer.process()).toThrow();
     });
   });
 

@@ -21,6 +21,11 @@ Yet Another Voxel Engine (written in TS).
 
 ## Research
 
+### Notes
+
+- RenderSystems should be used for anything that requires buttersmooth movement, camera, graphics, rendering, etc.
+  - One edge case is making an object follow the mouse. This should be a render system since the mouse moves much faster than the "ticking speed," BUT any other kind of movement that requires a "set speed" (like player movement speed) should be handled by a normal system in order to get better/more predictable results and to prevent lag from impacting the behavior too much.
+
 ### ECS
 
 - [ECS-TS by Trixt0r](https://github.com/Trixt0r/ecsts): Perhaps the best ECS system I've ever seen (although needs a bit of doc & typing corrections)
