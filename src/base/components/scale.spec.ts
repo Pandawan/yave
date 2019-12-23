@@ -1,4 +1,5 @@
 import { Scale } from './scale';
+import { Vector } from '../../utils';
 
 describe('Scale Component', () => {
   describe('constructor', () => {
@@ -29,10 +30,13 @@ describe('Scale Component', () => {
       expect(scale.y).toBe(3);
       expect(scale.z).toBe(4);
     });
-  });
 
-  it('should output with toString', () => {
-    const scale = new Scale(2, 3, 4);
-    expect(scale.toString()).toBe('(2, 3, 4)');
+    it('should work with a vector parameter', () => {
+      const vec = new Vector(2, 3, 4);
+      const scale = new Scale(vec);
+      expect(scale.x).toBe(vec.x);
+      expect(scale.y).toBe(vec.y);
+      expect(scale.z).toBe(vec.z);
+    });
   });
 });

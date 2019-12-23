@@ -1,4 +1,5 @@
 import normalizeWheel from 'normalize-wheel';
+import { Vector } from '../utils';
 
 interface KeyBindings {
   /**
@@ -26,36 +27,20 @@ interface KeyStates {
 
 interface CursorState {
   // TODO: spec.ts file
-  // TODO: Make x, y, dx, dy based on in-game positions but also provide a non-game version
-  // TODO: Improve performance!
   /**
-   * Current horizontal position (in pixels) of the cursor relative to the game container.
+   * Current position (in pixels) of the cursor relative to the game container.
    */
-  x: number;
+  position: Vector;
   /**
-   * Current vertical position (in pixels) of the cursor relative to the game container.
+   * Change in position (in pixels) of the cursor (since last render frame) relative to the game container.
    */
-  y: number;
+  delta: Vector;
   /**
-   * Change in horizontal position of the cursor (since last render frame) relative to the game container.
-   */
-  dx: number;
-  /**
-   * Change in vertical position of the cursor (since last render frame) relative to the game container.
-   */
-  dy: number;
-  /**
-   * Change in horizontal scrolling (since last update frame).
+   * Change in scrolling (since last update frame).
    * A reasonably slow scroll will be approximately 1.
-   * Positive is right; negative is left.
+   * Positive is down/right; negative is up/left.
    */
-  scrollx: number;
-  /**
-   * Change in vertical scrolling (since last update frame).
-   * A reasonably slow scroll will be approximately 1.
-   * Positive is down; negative is up.
-   */
-  scrolly: number;
+  scroll: Vector;
   /**
    * Whether or not the pointer is currently locked.
    */
@@ -107,12 +92,9 @@ export class YaveInput {
     this._keys = {};
     this.lockCursor = lockCursor;
     this._cursor = {
-      x: 0,
-      y: 0,
-      dx: 0,
-      dy: 0,
-      scrollx: 0,
-      scrolly: 0,
+      position: new Vector(),
+      delta: new Vector(),
+      scroll: new Vector(),
       locked: false,
     };
 
@@ -148,8 +130,8 @@ export class YaveInput {
    * Update event, cleans up update-related values
    */
   public update(): void {
-    this._cursor.scrollx = 0;
-    this._cursor.scrolly = 0;
+    this._cursor.scroll.x = 0;
+    this._cursor.scroll.y = 0;
   }
 
   /**
@@ -162,8 +144,8 @@ export class YaveInput {
     }
 
     // Cursor movement is more "visible" so it's updated on render
-    this._cursor.dx = 0;
-    this._cursor.dy = 0;
+    this._cursor.delta.x = 0;
+    this._cursor.delta.y = 0;
   }
 
   /**
@@ -238,8 +220,8 @@ export class YaveInput {
 
   private onMouseWheelEvent(event: WheelEvent | MouseWheelEvent): boolean {
     const wheelData = normalizeWheel(event);
-    this._cursor.scrollx = wheelData.spinX;
-    this._cursor.scrolly = wheelData.spinY;
+    this._cursor.scroll.x = wheelData.spinX;
+    this._cursor.scroll.y = wheelData.spinY;
 
     // Prevent scroll event from scrolling through webpage (rubberbanding and such)
     event.preventDefault();
@@ -275,10 +257,10 @@ export class YaveInput {
   }
 
   private onMouseMoveEvent(event: MouseEvent): void {
-    this._cursor.dx += event.movementX ?? (event as any).mozMovementX ?? 0;
-    this._cursor.dy += event.movementY ?? (event as any).mozMovementY ?? 0;
-    this._cursor.x = event.clientX;
-    this._cursor.y = event.clientY;
+    this._cursor.delta.x += event.movementX ?? (event as any).mozMovementX ?? 0;
+    this._cursor.delta.y += event.movementY ?? (event as any).mozMovementY ?? 0;
+    this._cursor.position.x = event.clientX;
+    this._cursor.position.y = event.clientY;
   }
 
   private onClickContainer(_event: MouseEvent): void {

@@ -4,7 +4,7 @@ import { normalize, Vector } from '../../utils';
 /**
  * Rotation Component to represent an entity's rotation in world space.
  */
-export class Rotation implements Component {
+export class Rotation extends Vector implements Component {
   /**
    * Rotation on the x axis (in degrees).
    */
@@ -95,7 +95,22 @@ export class Rotation implements Component {
    * @param z Rotation on the z axis (in degrees).
    */
   constructor(x: number, y: number, z: number);
-  constructor(x?: number, y?: number, z?: number) {
+  /**
+   * Create a rotation component from the given vector.
+   * @param vector Rotation vector (in degrees).
+   */
+  constructor(vector: Vector);
+  constructor(x?: number | Vector, y?: number, z?: number) {
+    // If a vector is passed, reassign x, y, z to the vector values
+    if (x instanceof Vector) {
+      const vec = x;
+      x = vec.x;
+      z = vec.z;
+      y = vec.y;
+    }
+
+    super();
+
     const clampedX = x !== undefined ? normalize(x, 0, 360) : undefined;
     const clampedY = y !== undefined ? normalize(y, 0, 360) : undefined;
     const clampedZ = z !== undefined ? normalize(z, 0, 360) : undefined;
@@ -109,6 +124,7 @@ export class Rotation implements Component {
       this.x = 0;
       this.y = 0;
       this.z = clampedX;
+      // TODO: Do this through super(call)
     }
     // Otherwise, just use the passed parameters
     // this allows edge cases like Rotation(undefined, 0, 0) to work.
@@ -137,7 +153,25 @@ export class Rotation implements Component {
    * @param z Rotation on the z axis (in radians).
    */
   public static fromRadians(x: number, y: number, z: number): Rotation;
-  public static fromRadians(x: number, y?: number, z?: number): Rotation {
+  /**
+   * Create a rotation component from the given vector.
+   * NOTE: Converting from radians to degrees might result in floating point errors.
+   * @param vector Rotation vector (in radians).
+   */
+  public static fromRadians(vector: Vector): Rotation;
+  public static fromRadians(
+    x: number | Vector,
+    y?: number,
+    z?: number
+  ): Rotation {
+    // If a vector is passed, reassign x, y, z to the vector values
+    if (x instanceof Vector) {
+      const vec = x;
+      x = vec.x;
+      z = vec.z;
+      y = vec.y;
+    }
+
     const clampedX = normalize(x, 0, 2 * Math.PI);
     const clampedY = y !== undefined ? normalize(y, 0, 2 * Math.PI) : undefined;
     const clampedZ = z !== undefined ? normalize(z, 0, 2 * Math.PI) : undefined;
@@ -151,9 +185,5 @@ export class Rotation implements Component {
       ((clampedY ?? 0) * 180) / Math.PI,
       ((clampedZ ?? 0) * 180) / Math.PI
     );
-  }
-
-  public toString(): string {
-    return `(${this.x}, ${this.y}, ${this.z})`;
   }
 }

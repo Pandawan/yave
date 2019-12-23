@@ -1,5 +1,6 @@
 import { PixiRenderingEngine } from './pixiRenderingEngine';
-import PIXI from '../lib/pixi';
+import PIXI, { Viewport } from '../lib/pixi';
+import { Vector } from '../utils';
 
 describe('PixiRendering', () => {
   beforeEach(() => {
@@ -50,6 +51,47 @@ describe('PixiRendering', () => {
     });
   });
 
-  test.todo('should convert a screen to world position');
-  test.todo('should convert a world to screen position');
+  describe('position conversion', () => {
+    it('should convert a screen to world position', () => {
+      const pixiRendering = new PixiRenderingEngine('game');
+      pixiRendering.world = new Viewport({
+        screenWidth: 400, // Screen 400x300
+        screenHeight: 300,
+        noTicker: true,
+      });
+      const screenPos = new Vector(100, 100);
+      expect(pixiRendering.screenToWorldPosition(screenPos)).toMatchObject({
+        x: 100,
+        y: 100,
+        z: 0,
+      });
+      pixiRendering.world.moveCorner(150, 150); // Move top left corner by 100
+      expect(pixiRendering.screenToWorldPosition(screenPos)).toMatchObject({
+        x: 250,
+        y: 250,
+        z: 0,
+      });
+    });
+
+    it('should convert a world to screen position', () => {
+      const pixiRendering = new PixiRenderingEngine('game');
+      pixiRendering.world = new Viewport({
+        screenWidth: 400, // Screen 400x300
+        screenHeight: 300,
+        noTicker: true,
+      });
+      const worldPos = new Vector(100, 100);
+      expect(pixiRendering.worldToScreenPosition(worldPos)).toMatchObject({
+        x: 100,
+        y: 100,
+        z: 0,
+      });
+      pixiRendering.world.moveCorner(150, 150); // Move top left corner by 100
+      expect(pixiRendering.worldToScreenPosition(worldPos)).toMatchObject({
+        x: -50,
+        y: -50,
+        z: 0,
+      });
+    });
+  });
 });

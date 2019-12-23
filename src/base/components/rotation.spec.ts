@@ -1,4 +1,5 @@
 import { Rotation } from './rotation';
+import { Vector } from '../../utils';
 
 describe('Rotation Component', () => {
   describe('constructor', () => {
@@ -21,6 +22,14 @@ describe('Rotation Component', () => {
       expect(rot.x).toBe(1);
       expect(rot.y).toBe(2);
       expect(rot.z).toBe(3);
+    });
+
+    it('should set x, y, and z when used with a vector parameter', () => {
+      const vec = new Vector(1, 2, 3);
+      const rot = new Rotation(vec);
+      expect(rot.x).toBe(vec.x);
+      expect(rot.y).toBe(vec.y);
+      expect(rot.z).toBe(vec.z);
     });
 
     it('should clamp values correctly between 0 and 360', () => {
@@ -63,6 +72,14 @@ describe('Rotation Component', () => {
       expect(rot.y).toBeCloseTo(45); // Above range
       expect(rot.z).toBeCloseTo(60); // More than one revolution
     });
+
+    it('should set x, y, and z when used with a vector parameter', () => {
+      const vec = new Vector(Math.PI / 6, Math.PI / 4, Math.PI / 3);
+      const rot = Rotation.fromRadians(vec);
+      expect(rot.x).toBeCloseTo(30);
+      expect(rot.y).toBeCloseTo(45);
+      expect(rot.z).toBeCloseTo(60);
+    });
   });
 
   describe('radians', () => {
@@ -82,10 +99,5 @@ describe('Rotation Component', () => {
       expect(rot.y).toBeCloseTo(45);
       expect(rot.z).toBeCloseTo(60);
     });
-  });
-
-  it('should output with toString', () => {
-    const rot = new Rotation(1, 2, 3);
-    expect(rot.toString()).toBe('(1, 2, 3)');
   });
 });

@@ -1,4 +1,5 @@
 import { Position } from './position';
+import { Vector } from '../../utils';
 
 describe('Position Component', () => {
   describe('constructor', () => {
@@ -22,10 +23,13 @@ describe('Position Component', () => {
       expect(pos.y).toBe(2);
       expect(pos.z).toBe(3);
     });
-  });
 
-  it('should output with toString', () => {
-    const pos = new Position(1, 2, 3);
-    expect(pos.toString()).toBe('(1, 2, 3)');
+    it('should work with a vector parameter', () => {
+      const vec = new Vector(1, 2, 3);
+      const pos = new Position(vec);
+      expect(pos.x).toBe(vec.x);
+      expect(pos.y).toBe(vec.y);
+      expect(pos.z).toBe(vec.z);
+    });
   });
 });

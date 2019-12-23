@@ -38,7 +38,6 @@ export abstract class AbstractRendering<T> {
    */
   abstract render(dt: number): void;
 
-  // TODO: ADD SPEC>TS TEST
   /**
    * Converts the given screen position to a world position.
    * @param screenPosition A position in screen coordinates.
