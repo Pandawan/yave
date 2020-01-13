@@ -1,4 +1,4 @@
-import { YaveEntity, YaveEntitySystem } from '../../../ecs';
+import { YaveEntity, YaveEntityRenderingSystem } from '../../../ecs';
 import { StaticTilemap } from '../components/staticTilemap';
 import { TilemapRendering } from '../../../rendering';
 import { Vector } from '../../../utils';
@@ -6,7 +6,7 @@ import { Vector } from '../../../utils';
 /**
  * Processes static & dynamic tilemaps to be rendered by the TilemapRendering engine.
  */
-export class TilemapProcessor extends YaveEntitySystem {
+export class TilemapProcessor extends YaveEntityRenderingSystem {
   constructor() {
     super(undefined, [TilemapRendering], undefined, [StaticTilemap]);
   }
@@ -21,13 +21,17 @@ export class TilemapProcessor extends YaveEntitySystem {
     const tilemap = entity.components.get(StaticTilemap);
     const rendering = entity.components.get(TilemapRendering);
 
-    for (const [strPos, tileId] of tilemap.dirtyTiles) {
+    if (tilemap.isDirty === false) return;
+
+    // Clear the entire tilemap before rendering cycle
+    rendering.tileLayer.clear();
+
+    // Loop through every tile and add it to be rendered
+    for (const [strPos, tileId] of tilemap.tiles) {
       // TODO: This is very inefficient, string -> Vector b/c can't map over Vector
       const tilePos = Vector.fromString(strPos);
-      if (tileId === undefined) break; // TODO: Removing tiles
       const tileDef = tilemap.tileDefinitions.get(tileId);
 
-      // TODO: Fix undefined tileDef? (Position asks for a tile that doesn't exist)
       if (
         tileId === undefined ||
         tilePos === undefined ||
