@@ -7,6 +7,9 @@ export class Vector {
   public z: number;
 
   // TODO: Standardize Vector everywhere (position, rotation, cursor pos, cursor movement, etc.)
+
+  // TODO: Spec file
+
   /**
    * Create a Vector with default values of 0
    */

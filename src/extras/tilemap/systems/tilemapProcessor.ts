@@ -7,6 +7,7 @@ import { Vector } from '../../../utils';
  * Processes static & dynamic tilemaps to be rendered by the TilemapRendering engine.
  */
 export class TilemapProcessor extends YaveEntityRenderingSystem {
+  // TODO: Spec file
   constructor() {
     super(undefined, [TilemapRendering], undefined, [StaticTilemap]);
   }
@@ -23,6 +24,10 @@ export class TilemapProcessor extends YaveEntityRenderingSystem {
 
     if (tilemap.isDirty === false) return;
 
+    /*
+     * NOTE: This might seem inefficient but it is recommended by pixi-tilemap creator
+     * https://github.com/pixijs/pixi-tilemap/issues/14
+     */
     // Clear the entire tilemap before rendering cycle
     rendering.tileLayer.clear();
 

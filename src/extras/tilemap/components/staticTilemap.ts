@@ -2,6 +2,8 @@ import { Component } from '@trixt0r/ecs';
 import PIXI from '../../../lib/pixi';
 import { Vector } from '../../../utils';
 
+// TODO: Spec file
+
 interface TileDefinition {
   /**
    * The texture or path to the texture to render this tile as.
