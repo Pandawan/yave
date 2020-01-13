@@ -276,6 +276,7 @@ export class YaveInput {
    * Register default key bindings.
    */
   public registerDefaultBindings(): void {
+    // TODO: Make these auto-register and instead have setting to prevent it
     this.addBinding('up', 'w', 'arrowup')
       .addBinding('down', 's', 'arrowdown')
       .addBinding('left', 'a', 'arrowleft')

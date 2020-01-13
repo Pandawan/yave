@@ -14,6 +14,7 @@ export class FramerateCounter extends YaveRenderingSystem {
     this.textElement.style.color = 'white';
     this.textElement.style.background = 'rgba(0,0,0,0.25)';
     this.textElement.style.fontFamily = 'sans-serif';
+    this.textElement.style.userSelect = 'none';
     document.body.appendChild(this.textElement);
   }
 

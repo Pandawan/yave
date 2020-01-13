@@ -25,13 +25,64 @@ export class Vector {
     this.z = z ?? 0;
   }
 
-  public set(x: number, y: number, z = 0): void {
+  public set(x: number, y: number, z = 0): Vector {
     this.x = x;
     this.y = y;
     this.z = z;
+    return this;
+  }
+
+  public map(
+    callbackfn: (value: number, index: number, vector: Vector) => number
+  ): Vector {
+    this.x = callbackfn(this.x, 0, this);
+    this.y = callbackfn(this.y, 1, this);
+    this.z = callbackfn(this.z, 2, this);
+    return this;
+  }
+
+  public clone(): Vector {
+    return new Vector(this.x, this.y, this.z);
+  }
+
+  public round(): Vector {
+    this.x = Math.round(this.x);
+    this.y = Math.round(this.y);
+    this.z = Math.round(this.z);
+    return this;
+  }
+  public floor(): Vector {
+    this.x = Math.floor(this.x);
+    this.y = Math.floor(this.y);
+    this.z = Math.floor(this.z);
+    return this;
+  }
+  public ceil(): Vector {
+    this.x = Math.ceil(this.x);
+    this.y = Math.ceil(this.y);
+    this.z = Math.ceil(this.z);
+    return this;
   }
 
   public toString(): string {
     return `(${this.x}, ${this.y}, ${this.z})`;
+  }
+
+  public static fromString(value: string): Vector {
+    const match = value.match(
+      /\( *(?:(-?[0-9.]+) *,)? *(?:(-?[0-9.]+) *,)? *(?:(-?[0-9.]+)) *\)/
+    );
+
+    if (match === undefined || match === null || match.length === 0) {
+      throw new Error('Passed string could not be parsed as vector.');
+    }
+
+    // Take the match (array of strings) and convert it to an array of numbers
+    const pos = match
+      .slice(1, 4)
+      .filter(val => val !== undefined && val !== null)
+      .map(val => new Number(val).valueOf());
+
+    return new this(pos?.[0] ?? 0, pos?.[1] ?? 0, pos?.[2] ?? 0);
   }
 }
