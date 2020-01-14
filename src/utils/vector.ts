@@ -6,10 +6,6 @@ export class Vector {
   public y: number;
   public z: number;
 
-  // TODO: Standardize Vector everywhere (position, rotation, cursor pos, cursor movement, etc.)
-
-  // TODO: Spec file
-
   /**
    * Create a Vector with default values of 0
    */
@@ -44,22 +40,20 @@ export class Vector {
     return this;
   }
 
-  public clone(): Vector {
-    return new Vector(this.x, this.y, this.z);
-  }
-
   public round(): Vector {
     this.x = Math.round(this.x);
     this.y = Math.round(this.y);
     this.z = Math.round(this.z);
     return this;
   }
+
   public floor(): Vector {
     this.x = Math.floor(this.x);
     this.y = Math.floor(this.y);
     this.z = Math.floor(this.z);
     return this;
   }
+
   public ceil(): Vector {
     this.x = Math.ceil(this.x);
     this.y = Math.ceil(this.y);
@@ -67,8 +61,32 @@ export class Vector {
     return this;
   }
 
-  public toString(): string {
-    return `(${this.x}, ${this.y}, ${this.z})`;
+  public clone(): Vector {
+    return new Vector(this.x, this.y, this.z);
+  }
+
+  /**
+   * Convert the given vector to a 3-element array with [x, y, z].
+   * @param as2D Whether or not to only request for the x and y component of the array.
+   */
+  public toArray(as2D?: false): [number, number, number];
+  /**
+   * Convert the given vector to a 2-element array with [x, y].
+   * @param as2D Whether or not to only request for the x and y component of the array.
+   */
+  public toArray(as2D: true): [number, number];
+  public toArray(as2D = false): [number, number] | [number, number, number] {
+    return as2D ? [this.x, this.y] : [this.x, this.y, this.z];
+  }
+
+  /**
+   * Convert the given vector to a string (x, y, z).
+   * @param as2D Whether or not to only request for the x and y component of the array.
+   */
+  public toString(as2D = false): string {
+    return as2D
+      ? `(${this.x}, ${this.y})`
+      : `(${this.x}, ${this.y}, ${this.z})`;
   }
 
   public static fromString(value: string): Vector {

@@ -8,15 +8,15 @@ export class Rotation extends Vector implements Component {
   /**
    * Rotation on the x axis (in degrees).
    */
-  public x: number;
+  public declare x: number;
   /**
    * Rotation on the y axis (in degrees).
    */
-  public y: number;
+  public declare y: number;
   /**
    * Rotation on the z axis (in degrees).
    */
-  public z: number;
+  public declare z: number;
 
   /**
    * Pivot point to rotate around.

@@ -9,15 +9,15 @@ export class Position extends Vector implements Component {
   /**
    * Position on the x axis.
    */
-  public x: number;
+  public declare x: number;
   /**
    * Position on the y axis.
    */
-  public y: number;
+  public declare y: number;
   /**
    * Position on the z axis.
    */
-  public z: number;
+  public declare z: number;
 
   /**
    * Create a position component with default values of 0.
@@ -45,10 +45,5 @@ export class Position extends Vector implements Component {
     }
 
     super(x, y, z);
-
-    // NOTE: I know this is redundant, but TS throws an error even though the base class already defines x, y, z
-    this.x = x;
-    this.y = y;
-    this.z = z;
   }
 }

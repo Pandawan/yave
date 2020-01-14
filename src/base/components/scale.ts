@@ -8,15 +8,15 @@ export class Scale extends Vector implements Component {
   /**
    * Scale on the x axis.
    */
-  public x: number;
+  public declare x: number;
   /**
    * Scale on the y axis.
    */
-  public y: number;
+  public declare y: number;
   /**
    * Scale on the z axis.
    */
-  public z: number;
+  public declare z: number;
 
   /**
    * Create a scale component with default values of 1.
@@ -50,15 +50,9 @@ export class Scale extends Vector implements Component {
     // If only x is assigned, set it to all directions
     if (x !== undefined && y === undefined && z === undefined) {
       super(x, x, x);
-      this.x = x;
-      this.y = x;
-      this.z = x;
     } else {
-      super(x ?? 1, y ?? 1, z ?? 1);
       // Otherwise, it will auto-set x, y, and z based on passed parameters
-      this.x = x ?? 1;
-      this.y = y ?? 1;
-      this.z = z ?? 1;
+      super(x ?? 1, y ?? 1, z ?? 1);
     }
   }
 }
