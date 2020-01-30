@@ -4,16 +4,7 @@ import { Vector } from '../../../utils';
 
 // TODO: Spec file
 
-interface TileDefinition {
-  /**
-   * The texture or path to the texture to render this tile as.
-   */
-  texture: PIXI.Texture | string;
-  /**
-   * The size of the tile in pixels.
-   */
-  size: Vector;
-}
+type TileDefinition = PIXI.Texture | string;
 
 type TileId = string;
 
@@ -27,7 +18,7 @@ export class StaticTilemap implements Component {
    * Definition of each tile by ID.
    * Key is tile ID, Value is tile definition.
    */
-  private _tileDefinitions: Map<TileId, TileDefinition>;
+  private _tileDefinitions: Map<TileId, TileDefinition>; // TODO: Maybe tileDefinitions should be on tilemapRendering?
 
   /**
    * 2D Map of internal tile IDs as references to the definitions.
@@ -120,6 +111,8 @@ export class StaticTilemap implements Component {
 
   // #region Tile Access
 
+  // TODO: Support z position (multiple layers? idk)
+
   public getTileAt(position: Vector): TileDefinition | undefined {
     const tileId = this.getTileIdAt(position);
     if (tileId === undefined) return undefined;
@@ -127,11 +120,11 @@ export class StaticTilemap implements Component {
   }
 
   public getTileIdAt(position: Vector): TileId | undefined {
-    return this._tiles.get(position.toString());
+    return this._tiles.get(position.toString(true));
   }
 
   public setTileAt(position: Vector, tileId: TileId | undefined): void {
-    const posStr = position.toString();
+    const posStr = position.toString(true);
 
     // If tileId is undefined, it has been removed
     if (tileId === undefined) {

@@ -1,10 +1,13 @@
 import { YaveEntity, YaveEntityRenderingSystem } from '../../../ecs';
 import { StaticTilemap } from '../components/staticTilemap';
-import { TilemapRendering } from '../../../rendering';
+import { TilemapRendering } from '../components/tilemapRendering';
 import { Vector } from '../../../utils';
 
+// TODO: Maybe merge TilemapRendering & StaticTilemap into one component (it doesn't make much sense for them to be separate)
+
 /**
- * Processes static & dynamic tilemaps to be rendered by the TilemapRendering engine.
+ * Processes tilemaps to be rendered by the TilemapRendering engine.
+ * NOTE: This does not do any camera bound checking rendering optimization. (TODO: Maybe later)
  */
 export class TilemapProcessor extends YaveEntityRenderingSystem {
   // TODO: Spec file
@@ -45,7 +48,7 @@ export class TilemapProcessor extends YaveEntityRenderingSystem {
         break;
       }
       rendering.tileLayer.addResizeableFrame(
-        tileDef.texture,
+        tileDef,
         /**
          * TODO: Make it so it resizes the texture when size is bigger than texture's size
          * (this might be tricky because texture doesn't handle sizing, Sprite does)
@@ -54,10 +57,10 @@ export class TilemapProcessor extends YaveEntityRenderingSystem {
          *
          * NOTE: This could be done by adding "UV" options
          */
-        tilePos.x * tileDef.size.x,
-        tilePos.y * tileDef.size.y,
-        tileDef.size.x,
-        tileDef.size.y
+        tilePos.x * rendering.tileSize,
+        tilePos.y * rendering.tileSize,
+        rendering.tileSize,
+        rendering.tileSize
       );
     }
 

@@ -31,6 +31,14 @@ export class Vector {
     return this;
   }
 
+  public add(other: Vector): Vector {
+    // TODO: Spec
+    this.x += other.x;
+    this.y += other.y;
+    this.z += other.z;
+    return this;
+  }
+
   public map(
     callbackfn: (value: number, index: number, vector: Vector) => number
   ): Vector {
@@ -67,12 +75,12 @@ export class Vector {
 
   /**
    * Convert the given vector to a 3-element array with [x, y, z].
-   * @param as2D Whether or not to only request for the x and y component of the array.
+   * @param as2D Whether or not to only request for the x and y component of the vector.
    */
   public toArray(as2D?: false): [number, number, number];
   /**
    * Convert the given vector to a 2-element array with [x, y].
-   * @param as2D Whether or not to only request for the x and y component of the array.
+   * @param as2D Whether or not to only request for the x and y component of the vector.
    */
   public toArray(as2D: true): [number, number];
   public toArray(as2D = false): [number, number] | [number, number, number] {
@@ -81,8 +89,14 @@ export class Vector {
 
   /**
    * Convert the given vector to a string (x, y, z).
-   * @param as2D Whether or not to only request for the x and y component of the array.
+   * @param as2D Whether or not to only request for the x and y component of the vector.
    */
+  public toString(as2D?: false): string;
+  /**
+   * Convert the given vector to a string (x, y).
+   * @param as2D Whether or not to only request for the x and y component of the vector.
+   */
+  public toString(as2D: true): string;
   public toString(as2D = false): string {
     return as2D
       ? `(${this.x}, ${this.y})`

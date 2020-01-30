@@ -3,7 +3,7 @@ import { YaveEntityRenderingSystem, YaveEntity } from '../../ecs';
 import { SpriteRendering } from '../components/spriteRendering';
 import { PixiRendering } from '../components/pixiRendering';
 import { TextRendering } from '../components/textRendering';
-import { TilemapRendering } from '../components/tilemapRendering';
+import { TilemapRendering } from '../../extras/tilemap/components/tilemapRendering';
 import { Position, Rotation, Scale } from '../../base';
 
 const supportedRenderingComponents: ComponentClass<PixiRendering>[] = [
