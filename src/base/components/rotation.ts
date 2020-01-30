@@ -109,33 +109,44 @@ export class Rotation extends Vector implements Component {
       y = vec.y;
     }
 
-    super();
-
-    const clampedX = x !== undefined ? normalize(x, 0, 360) : undefined;
-    const clampedY = y !== undefined ? normalize(y, 0, 360) : undefined;
-    const clampedZ = z !== undefined ? normalize(z, 0, 360) : undefined;
-
     // If only one rotation is passed, assume this is a 2D rotation (aka rotation around Z axis)
-    if (
-      clampedX !== undefined &&
-      clampedY === undefined &&
-      clampedZ === undefined
-    ) {
-      this.x = 0;
-      this.y = 0;
-      this.z = clampedX;
-      // TODO: Do this through super(call)
+    if (x !== undefined && y === undefined && z === undefined) {
+      super(0, 0, normalize(x, 0, 360));
     }
     // Otherwise, just use the passed parameters
     // this allows edge cases like Rotation(undefined, 0, 0) to work.
     else {
-      this.x = clampedX ?? 0;
-      this.y = clampedY ?? 0;
-      this.z = clampedZ ?? 0;
+      super(
+        normalize(x ?? 0, 0, 360),
+        normalize(y ?? 0, 0, 360),
+        normalize(z ?? 0, 0, 360)
+      );
     }
 
     // Set default pivot point in the middle
     this.pivot = new Vector(0, 0, 0);
+  }
+
+  public set(angle: number): Rotation;
+  public set(x: number, y: number, z: number): Rotation;
+  public set(x: number, y?: number, z?: number): Rotation {
+    if (x !== undefined && y === undefined && z === undefined) {
+      this.x = 0;
+      this.y = 0;
+      this.z = normalize(x ?? 0, 0, 360);
+    } else {
+      this.x = normalize(x ?? 0, 0, 360);
+      this.y = normalize(y ?? 0, 0, 360);
+      this.z = normalize(z ?? 0, 0, 360);
+    }
+    return this;
+  }
+
+  public add(other: Rotation): Rotation {
+    this.x += normalize(other.x ?? 0, 0, 360);
+    this.y += normalize(other.y ?? 0, 0, 360);
+    this.z += normalize(other.z ?? 0, 0, 360);
+    return this;
   }
 
   /**

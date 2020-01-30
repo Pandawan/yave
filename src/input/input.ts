@@ -47,9 +47,20 @@ interface CursorState {
   locked: boolean;
 }
 
+export interface YaveInputOptions {
+  /**
+   * Whether or not to automatically lock the cursor when entering the game view.
+   */
+  lockCursor: boolean;
+  /**
+   * Whether or not to automatically register default bindings for a simpler setup.
+   */
+  registerDefaultBindings: boolean;
+}
+
 export class YaveInput {
   /**
-   * Whether or not YaveInput should try to lock the cursor.
+   * Whether or not to automatically lock the cursor when clicking the game view.
    */
   public lockCursor: boolean;
 
@@ -78,25 +89,30 @@ export class YaveInput {
   }
 
   /**
-   * Create an Input manager.
+   * Create a YaveInput instance.
    * @param containerId The HTML #id of the container to handle input events from.
-   * @param lockCursor Whether or not to automatically lock the cursor when clicking the game view.
+   * @param options Other options to setup the YaveInput system.
    */
-  constructor(containerId: string, lockCursor = true) {
+  constructor(containerId: string, options?: YaveInputOptions) {
     const container = document.getElementById(containerId);
-    if (container === null)
+    if (container === null || container === undefined)
       throw new Error(`Could not find an element with id ${containerId}`);
     this._container = container;
 
     this._bindings = {};
     this._keys = {};
-    this.lockCursor = lockCursor;
+    this.lockCursor = options?.lockCursor ?? true;
     this._cursor = {
       position: new Vector(),
       delta: new Vector(),
       scroll: new Vector(),
       locked: false,
     };
+
+    // Options = undefined, or registerDefaultBindings = undefined or true
+    if (options?.registerDefaultBindings !== false) {
+      this.registerDefaultBindings();
+    }
 
     this.onKeyDownEvent = this.onKeyDownEvent.bind(this);
     this.onKeyUpEvent = this.onKeyUpEvent.bind(this);
@@ -276,7 +292,6 @@ export class YaveInput {
    * Register default key bindings.
    */
   public registerDefaultBindings(): void {
-    // TODO: Make these auto-register and instead have setting to prevent it
     this.addBinding('up', 'w', 'arrowup')
       .addBinding('down', 's', 'arrowdown')
       .addBinding('left', 'a', 'arrowleft')

@@ -3,7 +3,6 @@ import { Vector } from '../../utils';
 
 /**
  * Position Component to represent an entity's position in world space.
- * TODO: There's code duplication between this and scale (except scale's constructor works slightly differently).
  */
 export class Position extends Vector implements Component {
   /**

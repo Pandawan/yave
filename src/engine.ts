@@ -6,7 +6,14 @@ import {
 } from 'strongly-typed-events';
 import { YaveECS, RunOptions } from './ecs';
 import { PixiRenderingEngine } from './rendering/pixiRenderingEngine';
-import { YaveInput } from './input';
+import { YaveInput, YaveInputOptions } from './input';
+
+interface YaveEngineOptions {
+  /**
+   * How long (in ms) to wait between updates.
+   */
+  timeStep: number;
+}
 
 /**
  * The main class for the Yave Engine.
@@ -61,14 +68,23 @@ export class YaveEngine {
   /**
    * How long (in ms) to wait between updates.
    */
-  public timeStep = 33;
+  public timeStep: number;
 
-  // TODO: Add Options object so you can specify whether or not YaveInput should register default keybindings
-  constructor(containerId = 'game') {
+  /**
+   * Create a YaveEngine instance.
+   * @param containerId The HTML #id of the container to render in.
+   * @param options Other options to setup the YaveEngine and its systems.
+   */
+  constructor(
+    containerId = 'game',
+    options?: YaveEngineOptions & YaveInputOptions
+  ) {
+    this.timeStep = options?.timeStep ?? 33;
+
     // Important sub-engines are setup here
     this.ecs = new YaveECS(this);
     this.rendering = new PixiRenderingEngine(containerId);
-    this.input = new YaveInput(containerId);
+    this.input = new YaveInput(containerId, options);
   }
 
   /**
