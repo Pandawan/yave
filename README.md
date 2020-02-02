@@ -17,7 +17,8 @@ Yet Another Voxel Engine (written in TS).
   - inheritance support (can target base class in aspect and get any component that extends it).
   - better support for rendering/non-rendering system
   - assemblages?
-
+  - Handle yaveEngine/engine property better (so don't have to check null every time)
+  - Components.get should return T | null (it currently only returns T)
 
 ## TODO
 

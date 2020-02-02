@@ -2,20 +2,20 @@ import { RunOptions, YaveRenderingSystem } from '@/ecs';
 
 // TODO: Spec.ts
 export class FramerateCounter extends YaveRenderingSystem {
-  private textElement: HTMLElement;
+  private _textElement: HTMLElement;
 
   constructor() {
     super();
-    this.textElement = document.createElement('span');
-    this.textElement.style.position = 'absolute';
-    this.textElement.style.top = '0';
-    this.textElement.style.right = '0';
-    this.textElement.style.padding = '0.5rem';
-    this.textElement.style.color = 'white';
-    this.textElement.style.background = 'rgba(0,0,0,0.25)';
-    this.textElement.style.fontFamily = 'sans-serif';
-    this.textElement.style.userSelect = 'none';
-    document.body.appendChild(this.textElement);
+    this._textElement = document.createElement('span');
+    this._textElement.style.position = 'absolute';
+    this._textElement.style.top = '0';
+    this._textElement.style.right = '0';
+    this._textElement.style.padding = '0.5rem';
+    this._textElement.style.color = 'white';
+    this._textElement.style.background = 'rgba(0,0,0,0.25)';
+    this._textElement.style.fontFamily = 'sans-serif';
+    this._textElement.style.userSelect = 'none';
+    document.body.appendChild(this._textElement);
   }
 
   process(options?: RunOptions): void {
@@ -25,7 +25,7 @@ export class FramerateCounter extends YaveRenderingSystem {
     // Need deltaTime
     if (options === undefined) return;
 
-    this.textElement.textContent = `FPS ${Math.round(
+    this._textElement.textContent = `FPS ${Math.round(
       (1 / options.deltaTime) * 1000
     )}`;
   }

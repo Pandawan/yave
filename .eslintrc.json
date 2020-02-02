@@ -38,6 +38,13 @@
         // Sometimes, I need to convert to "any" in order to set private members to mock functions
         "@typescript-eslint/no-explicit-any": "off"
       }
+    },
+    {
+      "files": ["./utils/*.js", "jest.config.js"],
+      "env": {
+        "node": true,
+        "jest": true
+      }
     }
   ]
 }

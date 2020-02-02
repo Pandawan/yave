@@ -81,7 +81,7 @@ export class PixiRenderingEngine extends AbstractRendering<PIXI.Application> {
   }
 
   screenToWorldPosition(screenPosition: Vector): Vector {
-    if (this.world === undefined)
+    if (this.world === null)
       throw new Error('World has not yet been initialized.');
 
     const pos = this.world?.toWorld(screenPosition.x, screenPosition.y);
@@ -89,7 +89,7 @@ export class PixiRenderingEngine extends AbstractRendering<PIXI.Application> {
   }
 
   worldToScreenPosition(worldPosition: Vector): Vector {
-    if (this.world === undefined)
+    if (this.world === null)
       throw new Error('World has not yet been initialized.');
 
     const pos = this.world?.toScreen(worldPosition.x, worldPosition.y);

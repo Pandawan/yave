@@ -31,7 +31,7 @@ export class StaticTilemap implements Component {
    * Key is position, Value is tile ID.
    * (Clear this with clearDirty).
    */
-  private _dirtyTiles: Map<string, TileId | undefined>;
+  private _dirtyTiles: Map<string, TileId | null>;
 
   /**
    * 2D Map of internal tile IDs as references to the definitions.
@@ -44,10 +44,10 @@ export class StaticTilemap implements Component {
 
   /**
    * 2D Map of tile positions that have been modified in the last update.
-   * Key is position, Value is tile ID (undefined for "removed").
+   * Key is position, Value is tile ID (null for "removed").
    * (Clear this with clearDirty).
    */
-  public get dirtyTiles(): ReadonlyMap<string, TileId | undefined> {
+  public get dirtyTiles(): ReadonlyMap<string, TileId | null> {
     return this._dirtyTiles;
   }
 
@@ -101,7 +101,7 @@ export class StaticTilemap implements Component {
       for (const [tPos, tId] of this._tiles) {
         if (tId === tileId) {
           this._tiles.delete(tPos);
-          this._dirtyTiles.set(tPos, undefined);
+          this._dirtyTiles.set(tPos, null);
         }
       }
     }
@@ -123,19 +123,23 @@ export class StaticTilemap implements Component {
     return this._tiles.get(position.toString(true));
   }
 
-  public setTileAt(position: Vector, tileId: TileId | undefined): void {
+  public setTileAt(position: Vector, tileId: TileId | null): void {
     const posStr = position.toString(true);
 
     // If tileId is undefined, it has been removed
-    if (tileId === undefined) {
+    if (tileId === null) {
       this._tiles.delete(posStr);
-      this._dirtyTiles.set(posStr, undefined);
+      this._dirtyTiles.set(posStr, null);
       return;
     }
 
     // Set tile & add to list of dirty
     this._tiles.set(posStr, tileId);
     this._dirtyTiles.set(posStr, tileId);
+  }
+
+  public removeTileAt(position: Vector): void {
+    this.setTileAt(position, null);
   }
 
   // #endregion
