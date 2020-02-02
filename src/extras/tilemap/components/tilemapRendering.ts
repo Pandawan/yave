@@ -1,6 +1,6 @@
-import PIXI from '../../../lib/pixi';
-import { PixiRendering } from '../../../rendering/components/pixiRendering';
-import { Vector } from '../../../utils';
+import PIXI from '@/lib/pixi';
+import { PixiRendering } from '@/rendering/components/pixiRendering';
+import { Vector } from '@/utils';
 
 export class TilemapRendering extends PixiRendering {
   /**

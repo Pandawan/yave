@@ -1,7 +1,7 @@
-import { YaveEntity } from '../../ecs/entity';
+import { YaveEntity } from '@/ecs/entity';
 import { PixiRenderer } from './pixiRenderer';
-import PIXI from '../../lib/pixi';
-import { Position, Rotation, Scale } from '../../base';
+import PIXI from '@/lib/pixi';
+import { Position, Rotation, Scale } from '@/base';
 import { SpriteRendering } from '../components/spriteRendering';
 import { TextRendering } from '../components/textRendering';
 import { PixiRendering } from '../components/pixiRendering';

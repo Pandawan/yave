@@ -1,4 +1,4 @@
-import PIXI from '../../lib/pixi';
+import PIXI from '@/lib/pixi';
 import { PixiRendering } from './pixiRendering';
 
 // NOTE: This is named TextRendering because "Text" name conflicts with pixi.js' Text and might be too confusing

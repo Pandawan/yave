@@ -1,7 +1,7 @@
-import { YaveEntity, YaveEntityRenderingSystem } from '../../../ecs';
+import { YaveEntity, YaveEntityRenderingSystem } from '@/ecs';
 import { StaticTilemap } from '../components/staticTilemap';
 import { TilemapRendering } from '../components/tilemapRendering';
-import { Vector } from '../../../utils';
+import { Vector } from '@/utils';
 
 /**
  * Processes tilemaps to be rendered by the TilemapRendering engine.

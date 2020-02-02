@@ -1,6 +1,6 @@
-import PIXI, { Viewport } from '../lib/pixi';
+import PIXI, { Viewport } from '@/lib/pixi';
 import { AbstractRendering } from './renderingEngine';
-import { Vector } from '../utils';
+import { Vector } from '@/utils';
 
 export class PixiRenderingEngine extends AbstractRendering<PIXI.Application> {
   /**

@@ -1,4 +1,4 @@
-import { YaveEngine } from '../engine';
+import { YaveEngine } from '@/engine';
 import { YaveECS } from './ecs';
 import { YaveRenderingSystem, YaveSystem } from './system';
 import { System } from '@trixt0r/ecs';

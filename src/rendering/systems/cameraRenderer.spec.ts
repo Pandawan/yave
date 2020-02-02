@@ -1,5 +1,5 @@
-import { YaveEntity } from '../../ecs/entity';
-import { Position, Rotation } from '../../base';
+import { YaveEntity } from '@/ecs/entity';
+import { Position, Rotation } from '@/base';
 import { CameraRenderer } from './cameraRenderer';
 import { Camera } from '../components/camera';
 

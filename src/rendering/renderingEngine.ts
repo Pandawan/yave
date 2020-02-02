@@ -1,4 +1,4 @@
-import { Vector } from '../utils';
+import { Vector } from '@/utils';
 
 export abstract class AbstractRendering<T> {
   public renderingEngine: T | null = null;

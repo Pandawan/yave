@@ -1,5 +1,5 @@
-import { YaveEntityRenderingSystem, YaveEntity } from '../../ecs';
-import { Position, Rotation } from '../../base';
+import { YaveEntityRenderingSystem, YaveEntity } from '@/ecs';
+import { Position, Rotation } from '@/base';
 import { Camera } from '../components/camera';
 
 /**

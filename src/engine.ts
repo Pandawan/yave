@@ -4,9 +4,9 @@ import {
   SimpleEventDispatcher,
   ISimpleEvent,
 } from 'strongly-typed-events';
-import { YaveECS, RunOptions } from './ecs';
-import { PixiRenderingEngine } from './rendering/pixiRenderingEngine';
-import { YaveInput, YaveInputOptions } from './input';
+import { YaveECS, RunOptions } from '@/ecs';
+import { PixiRenderingEngine } from '@/rendering';
+import { YaveInput, YaveInputOptions } from '@/input';
 
 interface YaveEngineOptions {
   /**

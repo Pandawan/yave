@@ -1,6 +1,6 @@
 import { Component } from '@trixt0r/ecs';
-import PIXI from '../../../lib/pixi';
-import { Vector } from '../../../utils';
+import PIXI from '@/lib/pixi';
+import { Vector } from '@/utils';
 
 // TODO: Spec file
 

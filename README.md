@@ -11,6 +11,14 @@ Yet Another Voxel Engine (written in TS).
 - Compiles to relatively new ES standards, I'm tired of supporting older browsers/versions
 - Not restricted to working with voxels (I know it's in the name, but I want to support both 2D & 3D)
 
+## TODO 2
+
+- Upcoming ecs system rewrite:
+  - inheritance support (can target base class in aspect and get any component that extends it).
+  - better support for rendering/non-rendering system
+  - assemblages?
+
+
 ## TODO
 
 - Standardize JSDoc, some have space before params, some have JSDoc typings, etc.

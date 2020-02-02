@@ -1,6 +1,6 @@
 import { Engine, EngineMode, SystemMode, System } from '@trixt0r/ecs';
 import { RunOptions } from './runOptions';
-import { YaveEngine } from '../engine';
+import { YaveEngine } from '@/engine';
 import { YaveSystem } from './system';
 
 export class YaveECS extends Engine {

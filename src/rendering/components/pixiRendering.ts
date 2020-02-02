@@ -1,5 +1,5 @@
 import { Component } from '@trixt0r/ecs';
-import PIXI from '../../lib/pixi';
+import PIXI from '@/lib/pixi';
 
 export abstract class PixiRendering implements Component {
   /**

@@ -1,5 +1,5 @@
 import normalizeWheel from 'normalize-wheel';
-import { Vector } from '../utils';
+import { Vector } from '@/utils';
 
 interface KeyBindings {
   /**

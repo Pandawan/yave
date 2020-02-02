@@ -1,4 +1,4 @@
-import PIXI from '../../lib/pixi';
+import PIXI from '@/lib/pixi';
 import { PixiRendering } from './pixiRendering';
 
 // NOTE: This is named SpriteRendering because "Sprite" name conflicts with pixi.js' Sprite and might be too confusing

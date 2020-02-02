@@ -1,4 +1,4 @@
-import { RunOptions, YaveRenderingSystem } from '../../ecs';
+import { RunOptions, YaveRenderingSystem } from '@/ecs';
 
 // TODO: Spec.ts
 export class FramerateCounter extends YaveRenderingSystem {

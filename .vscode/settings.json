@@ -1,14 +1,7 @@
 {
   "editor.tabSize": 2,
   "eslint.enable": true,
-  "eslint.autoFixOnSave": true,
-  "eslint.validate": [
-    "javascript",
-    {
-      "language": "typescript",
-      "autoFix": true
-    }
-  ],
+  "eslint.validate": ["javascript", "typescript"],
   "editor.formatOnSave": true,
   // Don't auto-format JS & TS since ESLint is already doing it
   "[javascript]": {
@@ -17,7 +10,6 @@
   "[typescript]": {
     "editor.formatOnSave": false
   },
-  "typescript.tsdk": "node_modules/typescript/lib",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   }

@@ -1,4 +1,4 @@
-import { YaveEngine } from '../engine';
+import { YaveEngine } from '@/engine';
 import { YaveECS } from './ecs';
 import { YaveEntity } from './entity';
 import { YaveEntitySystem, YaveEntityRenderingSystem } from './entitySystem';
