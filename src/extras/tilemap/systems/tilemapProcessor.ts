@@ -36,7 +36,7 @@ export class TilemapProcessor extends YaveEntityRenderingSystem {
     for (const [strPos, tileId] of tilemap.tiles) {
       // TODO: This is very inefficient, string -> Vector b/c can't map over Vector
       const tilePos = Vector.fromString(strPos);
-      const tileDef = tilemap.tileDefinitions.get(tileId);
+      const tileDef = rendering.tileDefinitions.get(tileId);
 
       if (
         tileId === undefined ||

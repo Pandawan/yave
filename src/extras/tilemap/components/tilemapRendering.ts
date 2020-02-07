@@ -2,7 +2,15 @@ import PIXI from '@/lib/pixi';
 import { PixiRendering } from '@/rendering/components/pixiRendering';
 import { Vector } from '@/utils';
 
-export class TilemapRendering extends PixiRendering {
+type TileDefinition = PIXI.Texture | string;
+
+export class TilemapRendering<TileId = string> extends PixiRendering {
+  /**
+   * Definition of each tile.
+   * Key is tile ID, Value is tile definition.
+   */
+  public tileDefinitions: Map<TileId, TileDefinition>;
+
   /**
    * The actual PIXI.tilemap object.
    */
@@ -14,12 +22,6 @@ export class TilemapRendering extends PixiRendering {
   public tileSize: number;
 
   /**
-   * Whether or not the sprite has been added to the renderingEngine.
-   * (This prevents it from being added/rendered multiple times).
-   */
-  public addedToEngine = false;
-
-  /**
    * The underlying generic PIXI object.
    */
   public get pixiObj(): PIXI.Container {
@@ -28,9 +30,12 @@ export class TilemapRendering extends PixiRendering {
 
   constructor(tileSize = 32, textures?: PIXI.Texture[]) {
     super();
+    this.tileDefinitions = new Map();
     this.tileLayer = new PIXI.tilemap.CompositeRectTileLayer(0, textures);
     this.tileSize = tileSize;
   }
+
+  // #region Position Utilities
 
   /**
    * Converts the given world position to a tilemap position.
@@ -64,4 +69,6 @@ export class TilemapRendering extends PixiRendering {
       .map(v => v * this.tileSize)
       .add(offset.map(v => v * this.tileSize));
   }
+
+  // #endregion
 }

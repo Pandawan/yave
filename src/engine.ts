@@ -13,6 +13,11 @@ interface YaveEngineOptions {
    * How long (in ms) to wait between updates.
    */
   timeStep: number;
+
+  /**
+   * After how many frames waiting to process should the engine skip them to catch up.
+   */
+  skipFrameCount: number;
 }
 
 /**
@@ -71,6 +76,11 @@ export class YaveEngine {
   public timeStep: number;
 
   /**
+   * After how many frames waiting to process should the engine skip them to catch up.
+   */
+  public skipFrameCount: number;
+
+  /**
    * Create a YaveEngine instance.
    * @param containerId The HTML #id of the container to render in.
    * @param options Other options to setup the YaveEngine and its systems.
@@ -80,6 +90,7 @@ export class YaveEngine {
     options?: YaveEngineOptions & YaveInputOptions
   ) {
     this.timeStep = options?.timeStep ?? 33;
+    this.skipFrameCount = options?.skipFrameCount ?? 10;
 
     // Important sub-engines are setup here
     this.ecs = new YaveECS(this);
@@ -189,10 +200,11 @@ export class YaveEngine {
 
     const currentTime = performance.now();
     let deltaTime = Math.min(1000, currentTime - this._lastTime);
-    // TODO: Is skipping after missing 10 updates appropriate?
     // If missed too many updates, skip all of them to catch up
     // (usually happens when process has slept or CPU can't keep up)
-    if (deltaTime > this.timeStep * 10) deltaTime = this.timeStep;
+    if (deltaTime > this.timeStep * this.skipFrameCount) {
+      deltaTime = this.timeStep;
+    }
 
     // Keep track of how long it has been since the last update
     this._accumulatedTime += deltaTime;

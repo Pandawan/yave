@@ -1,25 +1,14 @@
 import { Component } from '@trixt0r/ecs';
-import PIXI from '@/lib/pixi';
 import { Vector } from '@/utils';
 
 // TODO: Spec file
-
-type TileDefinition = PIXI.Texture | string;
-
-type TileId = string;
 
 /**
  * Creates a static tilemap where each tile is just an ID for a definition.
  * This component keeps track of a definition of tiles.
  * It represents the map as a 2D array of references to a corresponding tile definition.
  */
-export class StaticTilemap implements Component {
-  /**
-   * Definition of each tile by ID.
-   * Key is tile ID, Value is tile definition.
-   */
-  private _tileDefinitions: Map<TileId, TileDefinition>; // TODO: Maybe tileDefinitions should be on tilemapRendering?
-
+export class StaticTilemap<TileId = string> implements Component {
   /**
    * 2D Map of internal tile IDs as references to the definitions.
    * Key is position, Value is tile ID.
@@ -58,68 +47,16 @@ export class StaticTilemap implements Component {
     return this._dirtyTiles.size > 0;
   }
 
-  /**
-   * Definition of each tile.
-   * Key is tile ID, Value is tile definition.
-   * (Use associated functions to modify this registry of definitions).
-   */
-  public get tileDefinitions(): ReadonlyMap<TileId, TileDefinition> {
-    return this._tileDefinitions;
-  }
-
   public constructor() {
-    this._tileDefinitions = new Map();
     this._tiles = new Map();
     this._dirtyTiles = new Map();
   }
-
-  // #region Tile Definition
-
-  /**
-   * Registers the given tile definition, allowing this tile type to be used.
-   * @param tileId The identifier to refer to this tile defintion. (Can be a tile name, or other).
-   * @param tileDefinition The tile definition to register.
-   * @returns The tile ID used for the tile.
-   */
-  public registerTile(tileId: TileId, tileDefinition: TileDefinition): TileId {
-    if (tileId !== undefined && this._tileDefinitions.has(tileId) === true) {
-      throw new Error(`Tile definition with id ${tileId} already exists.`);
-    }
-    this._tileDefinitions.set(tileId, tileDefinition);
-    return tileId;
-  }
-
-  /**
-   * Removes the given tile definition from the registry.
-   * @param tileId The identifier of the tile definition to remove.
-   * @param clearTiles Whether or not to clear all the tiles with the given tileId.
-   */
-  public unregisterTile(tileId: TileId, clearTiles?: boolean): void {
-    this._tileDefinitions.delete(tileId);
-
-    if (clearTiles === true) {
-      for (const [tPos, tId] of this._tiles) {
-        if (tId === tileId) {
-          this._tiles.delete(tPos);
-          this._dirtyTiles.set(tPos, null);
-        }
-      }
-    }
-  }
-
-  // #endregion Tile Definition
 
   // #region Tile Access
 
   // TODO: Support z position (multiple layers? idk)
 
-  public getTileAt(position: Vector): TileDefinition | undefined {
-    const tileId = this.getTileIdAt(position);
-    if (tileId === undefined) return undefined;
-    return this._tileDefinitions.get(tileId);
-  }
-
-  public getTileIdAt(position: Vector): TileId | undefined {
+  public getTileAt(position: Vector): TileId | undefined {
     return this._tiles.get(position.toString(true));
   }
 

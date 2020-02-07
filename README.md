@@ -11,21 +11,22 @@ Yet Another Voxel Engine (written in TS).
 - Compiles to relatively new ES standards, I'm tired of supporting older browsers/versions
 - Not restricted to working with voxels (I know it's in the name, but I want to support both 2D & 3D)
 
-## TODO 2
+## Next TODO
 
+- Turn-based system
 - Upcoming ecs system rewrite:
   - inheritance support (can target base class in aspect and get any component that extends it).
-  - better support for rendering/non-rendering system
+  - better support for rendering/non-rendering system (perhaps give "tags" to components and allow for "Run()" with specific tag requirements).
   - assemblages?
+    - (need to figure out how that would work, perhaps make them very basic where you give it a basic entity + components list, this returns a function to create the entity with parameter that allows overriding that behavior?)
   - Handle yaveEngine/engine property better (so don't have to check null every time)
+    - Maybe RunOptions can pass it? (That might get messy)
   - Components.get should return T | null (it currently only returns T)
 
-## TODO
+## Longterm TODO
 
 - Standardize JSDoc, some have space before params, some have JSDoc typings, etc.
-- Standardize variable names (privates are or are not \_name, etc.)
 - Add an internal unit system (like Unity where 1 unit can be 16px or 32px or however many you want based on texture)
-- Add assemblages
 - Create docs
 
 ## Research

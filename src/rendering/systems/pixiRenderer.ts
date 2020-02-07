@@ -6,7 +6,7 @@ import { TextRendering } from '../components/textRendering';
 import { TilemapRendering } from '@/extras/tilemap/components/tilemapRendering';
 import { Position, Rotation, Scale } from '@/base';
 
-const supportedRenderingComponents: ComponentClass<PixiRendering>[] = [
+const defaultSupportedRenderingComponents: ComponentClass<PixiRendering>[] = [
   SpriteRendering,
   TextRendering,
   TilemapRendering,
@@ -16,8 +16,33 @@ const supportedRenderingComponents: ComponentClass<PixiRendering>[] = [
  * Rendering System for SpriteRendering and TextRendering component.
  */
 export class PixiRenderer extends YaveEntityRenderingSystem {
-  constructor() {
+  /**
+   * An internal list of the rendering components that are supported by this system.
+   * (This should not be changed after being set in the constructor).
+   */
+  private readonly supportedRenderingComponents: ReadonlyArray<
+    ComponentClass<PixiRendering>
+  >;
+
+  /**
+   * Rendering System for SpriteRendering and TextRendering component.
+   * @param supportedRenderingComponents Which components (extending PixiRendering) should be rendered through this system.
+   * Use this when implementing custom rendering components that should behave the same as typical pixi rendering components.
+   */
+  constructor(
+    supportedRenderingComponents = defaultSupportedRenderingComponents
+  ) {
+    // Make sure passed components are actually supported
+    for (const component of supportedRenderingComponents) {
+      if (component.prototype instanceof PixiRendering === false) {
+        throw new Error(
+          `${component} does not extend PixiRendering. Only PixiRendering components are supported.`
+        );
+      }
+    }
+
     super(undefined, [Position], undefined, supportedRenderingComponents);
+    this.supportedRenderingComponents = supportedRenderingComponents;
   }
 
   onAddedEntities(...entities: YaveEntity[]): void {
@@ -89,7 +114,7 @@ export class PixiRenderer extends YaveEntityRenderingSystem {
   }
 
   private getPixiRenderingComponents(entity: YaveEntity): PixiRendering[] {
-    return supportedRenderingComponents
+    return this.supportedRenderingComponents
       .map(componentClass => entity.components.get(componentClass))
       .filter(component => component !== undefined && component !== null);
   }
